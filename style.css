@@ -655,3 +655,165 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+
+/* =========================================
+   🌾 Crop Advisory
+   ========================================= */
+
+.crop-advisory-card {
+    margin-top: 24px;
+    padding: 24px;
+}
+
+.crop-advisory-header {
+    margin-bottom: 20px;
+}
+
+.crop-advisory-header h3 {
+    margin: 0 0 6px;
+    font-size: 22px;
+    color: #003366;
+}
+
+.crop-advisory-header p {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+
+/* Crop selection + condition */
+
+.crop-advisory-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 20px;
+}
+
+.crop-input-card,
+.crop-status-card {
+    padding: 18px;
+    border-radius: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+.crop-input-card label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.crop-input-card select {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: white;
+    font-size: 14px;
+    color: #334155;
+    cursor: pointer;
+    outline: none;
+}
+
+.crop-input-card select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+
+/* Crop condition */
+
+.crop-status-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.crop-status-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: #64748b;
+}
+
+.crop-status-card strong {
+    font-size: 20px;
+    color: #003366;
+}
+
+
+/* Recommendation */
+
+.crop-recommendation {
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    background: #f8fafc;
+    border-left: 4px solid #2563eb;
+}
+
+.crop-recommendation h4 {
+    margin: 0 0 10px;
+    font-size: 17px;
+    color: #003366;
+}
+
+.crop-recommendation p {
+    margin: 0;
+    line-height: 1.6;
+    color: #475569;
+    font-size: 14px;
+}
+
+
+/* Weather factors */
+
+.crop-factors {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.crop-factor {
+    padding: 16px;
+    border-radius: 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+.crop-factor span {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 13px;
+    color: #64748b;
+}
+
+.crop-factor strong {
+    font-size: 18px;
+    color: #003366;
+}
+
+
+/* =========================================
+   📱 Crop Advisory Responsive Design
+   ========================================= */
+
+@media (max-width: 700px) {
+
+    .crop-advisory-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .crop-factors {
+        grid-template-columns: 1fr;
+    }
+
+    .crop-advisory-card {
+        padding: 18px;
+    }
+
+}

@@ -297,6 +297,85 @@
             </div>
 
         </div>
+
+        </div>
+
+        <!-- Crop Advisory Section -->
+        <div class="card crop-advisory-card mt-4">
+
+            <div class="crop-advisory-header">
+                <div>
+                    <h3>🌾 Panchayat Crop Advisory</h3>
+                    <p>
+                        Weather-based agricultural recommendations
+                        for the selected Panchayat.
+                    </p>
+                </div>
+            </div>
+
+            <div class="crop-advisory-grid">
+
+                <!-- Crop Selection -->
+                <div class="crop-input-card">
+                    <label for="crop-select">Select Crop</label>
+
+                    <select id="crop-select">
+                        <option value="">-- Select Crop --</option>
+                        <option value="rice">Rice</option>
+                        <option value="wheat">Wheat</option>
+                        <option value="maize">Maize</option>
+                        <option value="potato">Potato</option>
+                        <option value="mustard">Mustard</option>
+                        <option value="vegetables">Vegetables</option>
+                    </select>
+                </div>
+
+                <!-- Crop Status -->
+                <div class="crop-status-card">
+                    <span class="crop-status-label">
+                        Crop Condition
+                    </span>
+
+                    <strong id="crop-condition">
+                        Select a crop
+                    </strong>
+                </div>
+
+            </div>
+
+            <!-- Advisory Result -->
+            <div class="crop-recommendation">
+
+                <h4>📋 Recommendation</h4>
+
+                <p id="crop-recommendation-text">
+                    Select a crop to receive a weather-based
+                    agricultural recommendation.
+                </p>
+
+            </div>
+
+            <!-- Weather Factors -->
+            <div class="crop-factors">
+
+                <div class="crop-factor">
+                    <span>🌡️ Temperature</span>
+                    <strong id="crop-temp-factor">--</strong>
+                </div>
+
+                <div class="crop-factor">
+                    <span>🌧️ Rainfall</span>
+                    <strong id="crop-rain-factor">--</strong>
+                </div>
+
+                <div class="crop-factor">
+                    <span>💧 Soil Moisture</span>
+                    <strong id="crop-soil-factor">--</strong>
+                </div>
+
+            </div>
+
+        </div>
     </section>
     <script src="./script.js"></script>
 

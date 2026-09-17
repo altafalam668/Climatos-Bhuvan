@@ -150,6 +150,47 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 let currentMarker = null;
+// --- Panchayat Boundary Layer ---
+let currentPanchayatBoundary = null;
+function clearPanchayatBoundary() {
+    if (currentPanchayatBoundary) {
+        map.removeLayer(currentPanchayatBoundary);
+        currentPanchayatBoundary = null;
+    }
+}
+
+
+function showPanchayatBoundary(geoJsonData) {
+
+    clearPanchayatBoundary();
+
+    if (!geoJsonData) {
+        return;
+    }
+
+    currentPanchayatBoundary = L.geoJSON(geoJsonData, {
+        style: {
+            color: "#003366",
+            weight: 3,
+            opacity: 1,
+            fillColor: "#3b82f6",
+            fillOpacity: 0.15
+        }
+    }).addTo(map);
+
+    // Automatically fit map to boundary
+    const boundaryBounds =
+        currentPanchayatBoundary.getBounds();
+
+    if (boundaryBounds.isValid()) {
+        map.fitBounds(boundaryBounds, {
+            padding: [30, 30]
+        });
+    }
+}
+const panchayatBoundaries = {
+    // Real GeoJSON boundaries will be added here later.
+};
 
 // 3. Mock Coordinates for the Panchayats in our dropdown
 const panchayatCoords = {
@@ -180,6 +221,8 @@ const panchayatCoords = {
     "Haridaspur": [26.2100, 85.8400]
 };
 
+
+
 // 4. Update the existing Panchayat change event
 // 6. Handle Panchayat Change + Location Information
 panchayatSelect.addEventListener('change', function () {
@@ -187,6 +230,7 @@ panchayatSelect.addEventListener('change', function () {
     const selectedPanchayat = this.value;
 
     btnSubmit.disabled = !selectedPanchayat;
+    clearPanchayatBoundary();
 
     if (!selectedPanchayat) {
         panchayatInfoName.textContent = "Panchayat Location";
@@ -245,6 +289,12 @@ panchayatSelect.addEventListener('change', function () {
                  Lon: ${lon.toFixed(4)}`
             )
             .openPopup();
+        // Show Panchayat boundary if available
+        const boundary = panchayatBoundaries[selectedPanchayat];
+
+        if (boundary) {
+            showPanchayatBoundary(boundary);
+        }
 
     } else {
 
@@ -253,6 +303,7 @@ panchayatSelect.addEventListener('change', function () {
         infoStatus.textContent = "Coordinates unavailable";
     }
 });
+
 
 
 
@@ -395,6 +446,16 @@ const advisoryCard = document.getElementById('advisory-card');
 const advisoryStatus = document.getElementById('advisory-status');
 const advisoryText = document.getElementById('advisory-text');
 
+// DOM Elements for Crop Advisory
+const cropSelect = document.getElementById('crop-select');
+const cropCondition = document.getElementById('crop-condition');
+const cropRecommendationText = document.getElementById('crop-recommendation-text');
+const cropTempFactor = document.getElementById('crop-temp-factor');
+const cropRainFactor = document.getElementById('crop-rain-factor');
+const cropSoilFactor = document.getElementById('crop-soil-factor');
+// Store the latest weather data for crop advisory
+let latestWeatherData = null;
+
 // DOM Elements for 7-day forecast
 const forecast7DaysContainer = document.getElementById('forecast-7-days');
 const rainfallRisk = document.getElementById('rainfall-risk');
@@ -405,6 +466,206 @@ const soilCondition = document.getElementById('soil-condition');
 const riskTodayRain = document.getElementById('risk-today-rain');
 const riskTotalRain = document.getElementById('risk-total-rain');
 const riskMaxTemp = document.getElementById('risk-max-temp');
+
+// =========================================
+// 🌾 Crop Advisory Logic
+// =========================================
+
+function updateCropAdvisory(data) {
+
+    const selectedCrop = cropSelect.value;
+
+    // No crop selected
+    if (!selectedCrop) {
+        cropCondition.textContent = "Select a crop";
+        cropRecommendationText.textContent =
+            "Select a crop to receive a weather-based agricultural recommendation.";
+
+        cropTempFactor.textContent = "--";
+        cropRainFactor.textContent = "--";
+        cropSoilFactor.textContent = "--";
+
+        return;
+    }
+
+    // Current weather values
+    const temperature = Number(data.current.temperature_c);
+    const soilMoisture = Number(data.current.soil_moisture_percent);
+
+    // Calculate 7-day rainfall
+    const totalRainfall = data.forecast_7_day.reduce(
+        (total, day) => total + Number(day.rainfall_mm || 0),
+        0
+    );
+
+    // Show weather factors
+    cropTempFactor.textContent = `${temperature} °C`;
+    cropRainFactor.textContent = `${totalRainfall.toFixed(1)} mm`;
+    cropSoilFactor.textContent = `${soilMoisture}%`;
+
+    let condition = "Moderate";
+    let recommendation =
+        "Weather conditions are moderate. Continue normal crop monitoring.";
+
+    // =========================================
+    // Rice
+    // =========================================
+
+    if (selectedCrop === "rice") {
+
+        if (totalRainfall > 50 && soilMoisture > 60) {
+            condition = "Favorable";
+            recommendation =
+                "Rainfall and soil moisture are relatively high. Monitor the field for excess water and maintain proper drainage.";
+        }
+
+        else if (temperature > 35) {
+            condition = "Heat Stress";
+            recommendation =
+                "High temperature may increase crop water demand. Monitor the field closely and maintain adequate irrigation where required.";
+        }
+
+        else {
+            condition = "Moderate";
+            recommendation =
+                "Continue regular monitoring of soil moisture, rainfall and crop condition.";
+        }
+    }
+
+
+    // =========================================
+    // Wheat
+    // =========================================
+
+    else if (selectedCrop === "wheat") {
+
+        if (temperature > 32) {
+            condition = "Heat Risk";
+            recommendation =
+                "High temperature may increase heat stress. Monitor crop condition and soil moisture closely.";
+        }
+
+        else if (totalRainfall > 40) {
+            condition = "Wet Conditions";
+            recommendation =
+                "Higher rainfall is expected. Monitor fields for excess moisture and avoid unnecessary irrigation.";
+        }
+
+        else {
+            condition = "Moderate";
+            recommendation =
+                "Weather conditions are moderate. Continue regular crop and soil-moisture monitoring.";
+        }
+    }
+
+
+    // =========================================
+    // Maize
+    // =========================================
+
+    else if (selectedCrop === "maize") {
+
+        if (temperature > 35) {
+            condition = "Heat Stress";
+            recommendation =
+                "High temperature may increase water demand. Monitor soil moisture and crop condition.";
+        }
+
+        else if (totalRainfall > 50) {
+            condition = "High Rainfall";
+            recommendation =
+                "Higher rainfall is expected. Monitor drainage and avoid unnecessary irrigation.";
+        }
+
+        else {
+            condition = "Moderate";
+            recommendation =
+                "Weather conditions are moderate. Continue normal crop monitoring.";
+        }
+    }
+
+
+    // =========================================
+    // Potato
+    // =========================================
+
+    else if (selectedCrop === "potato") {
+
+        if (totalRainfall > 40) {
+            condition = "Wet Conditions";
+            recommendation =
+                "Wet conditions are expected. Monitor drainage and avoid waterlogging around the crop.";
+        }
+
+        else if (temperature > 30) {
+            condition = "Heat Risk";
+            recommendation =
+                "Higher temperatures may affect crop conditions. Monitor soil moisture and crop health.";
+        }
+
+        else {
+            condition = "Moderate";
+            recommendation =
+                "Weather conditions are moderate. Continue regular monitoring.";
+        }
+    }
+
+
+    // =========================================
+    // Mustard
+    // =========================================
+
+    else if (selectedCrop === "mustard") {
+
+        if (temperature > 30) {
+            condition = "Heat Risk";
+            recommendation =
+                "Higher temperature may increase crop stress. Monitor the crop and soil moisture.";
+        }
+
+        else if (totalRainfall > 40) {
+            condition = "Wet Conditions";
+            recommendation =
+                "Higher rainfall is expected. Monitor field drainage and avoid excess irrigation.";
+        }
+
+        else {
+            condition = "Moderate";
+            recommendation =
+                "Weather conditions are moderate. Continue regular crop monitoring.";
+        }
+    }
+
+
+    // =========================================
+    // Vegetables
+    // =========================================
+
+    else if (selectedCrop === "vegetables") {
+
+        if (totalRainfall > 50) {
+            condition = "High Rainfall";
+            recommendation =
+                "Higher rainfall is expected. Monitor drainage and watch for excess moisture.";
+        }
+
+        else if (temperature > 35) {
+            condition = "Heat Risk";
+            recommendation =
+                "High temperature may increase water demand. Monitor soil moisture carefully.";
+        }
+
+        else {
+            condition = "Moderate";
+            recommendation =
+                "Weather conditions are moderate. Continue regular monitoring of crop and soil moisture.";
+        }
+    }
+
+    // Update UI
+    cropCondition.textContent = condition;
+    cropRecommendationText.textContent = recommendation;
+}
 
 btnSubmit.addEventListener('click', async () => {
     const state = stateSelect.value;
@@ -437,6 +698,10 @@ btnSubmit.addEventListener('click', async () => {
         }
 
         const data = await response.json();
+
+
+        // Save latest weather data for Crop Advisory
+        latestWeatherData = data;
 
         // -----------------------------
         // Climate Risk Dashboard
@@ -474,6 +739,9 @@ btnSubmit.addEventListener('click', async () => {
         currentHumidity.textContent = `${data.current.humidity_percent}%`;
         currentWind.textContent = `${data.current.wind_speed_kmh} km/h`;
         currentSoil.textContent = `${data.current.soil_moisture_percent}%`;
+
+        // 2.5 Update Crop Advisory
+        updateCropAdvisory(data);
 
         // 3. Render Agromet Advisory
         const status = data.agromet_advisory.status;
@@ -656,4 +924,15 @@ languageSelect.addEventListener('change', (e) => {
 
     const forecastHeading = document.querySelector('#forecast-results .card.mt-4 h3');
     if (forecastHeading) forecastHeading.textContent = t.forecastHeading;
+});
+// =========================================
+// 🌾 Crop Selection Change
+// =========================================
+
+cropSelect.addEventListener('change', () => {
+
+    if (latestWeatherData) {
+        updateCropAdvisory(latestWeatherData);
+    }
+
 });
