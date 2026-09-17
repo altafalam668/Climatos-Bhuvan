@@ -1,0 +1,42 @@
+const translations = {
+    en: {
+        mainTitle: "Panchayat-Level Weather Forecast",
+        mainDesc: "Access high-resolution, downscaled weather predictions and agro-meteorological advisories for your local Panchayat.",
+        selectLocation: "Select Location",
+        stateLabel: "State",
+        districtLabel: "District",
+        blockLabel: "Block / Tehsil",
+        panchayatLabel: "Gram Panchayat",
+        btnLocation: "Use My Location",
+        btnSubmit: "Get Forecast Data",
+        mapTitle: "GIS & Bhuvan Panchayat Map",
+        resultsTitle: "Weather & Agromet Advisory for Selected Panchayat",
+        resultsSubtitle: "Weather forecast with Bhuvan Panchayat geospatial layers from NRSC/ISRO.",
+        currentConditions: "Current Conditions",
+        humidity: "Humidity",
+        windSpeed: "Wind Speed",
+        soilMoisture: "Soil Moisture",
+        advisoryHeading: "Agro-Meteorological Advisory",
+        forecastHeading: "7-Day Downscaled Forecast"
+    },
+    hi: {
+        mainTitle: "पंचायत स्तरीय मौसम पूर्वानुमान",
+        mainDesc: "अपनी स्थानीय पंचायत के लिए उच्च-रिज़ॉल्यूशन, डाउनस्केल्ड मौसम पूर्वानुमान और कृषि-मौसम संबंधी सलाह प्राप्त करें।",
+        selectLocation: "स्थान चुनें",
+        stateLabel: "राज्य",
+        districtLabel: "जिला",
+        blockLabel: "ब्लॉक / तहसील",
+        panchayatLabel: "ग्राम पंचायत",
+        btnLocation: "मेरे स्थान का उपयोग करें",
+        btnSubmit: "पूर्वानुमान डेटा प्राप्त करें",
+        mapTitle: "जीआईएस और भुवन पंचायत मानचित्र",
+        resultsTitle: "चयनित पंचायत के लिए मौसम और कृषि-मौसम सलाह",
+        resultsSubtitle: "एनआरएससी/इसरो के भुवन पंचायत भू-स्थानिक लेयर्स के साथ मौसम पूर्वानुमान।",
+        currentConditions: "वर्तमान स्थितियां",
+        humidity: "नमी",
+        windSpeed: "हवा की गति",
+        soilMoisture: "मिट्टी की नमी",
+        advisoryHeading: "कृषि-मौसम संबंधी सलाह",
+        forecastHeading: "7-दिन का डाउनस्केल्ड पूर्वानुमान"
+    }
+};

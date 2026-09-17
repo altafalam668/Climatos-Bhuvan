@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panchayat-Level Weather | MoES</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="./translations.js"></script>
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+     
+</head>
+    
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <!-- Top Utility Bar -->
+        <div class="top-bar">
+            <div class="container top-bar-content">
+                <div class="gov-text">भारत सरकार | GOVERNMENT OF INDIA</div>
+                <div class="utility-controls">
+                    <a href="#main-content" class="skip-link">Skip to Main Content</a>
+                    <div class="text-resize">
+                        <button>A-</button>
+                        <button class="active">A</button>
+                        <button>A+</button>
+                    </div>
+                    <select class="language-select" aria-label="Select Language">
+                        <option value="en">English</option>
+                        <option value="hi">हिन्दी (Hindi)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Branding Bar -->
+        <div class="branding-bar">
+            <div class="container branding-content">
+                <div class="logo-area">
+                    <div class="mock-logo">MoES</div>
+                    <div class="ministry-titles">
+                        <h1>पृथ्वी विज्ञान मंत्रालय</h1>
+                        <h2>Ministry of Earth Sciences</h2>
+                    </div>
+                </div>
+                <div class="swachh-bharat">Swachh Bharat</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <div class="container">
+            <a href="#">Home</a> &gt; 
+            <a href="#">Schemes and Services</a> &gt; 
+            <a href="#">Mission Mausam</a> &gt; 
+            <span>Panchayat-Level Forecast</span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" class="container main-grid">
+        <!-- Zone A: Location Selector -->
+        <aside class="location-selector card">
+            <div class="selector-header">
+                <h3>Select Location</h3>
+                <button id="btn-location" class="btn-primary small-btn">Use My Location</button>
+            </div>
+            
+            <div class="form-group">
+                <label for="state">State</label>
+                <select id="state">
+                    <option value="">-- Select State --</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="district">District</label>
+                <select id="district" disabled>
+                    <option value="">-- Select District --</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="block">Block / Tehsil</label>
+                <select id="block" disabled>
+                    <option value="">-- Select Block --</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="panchayat">Gram Panchayat</label>
+                <select id="panchayat" disabled>
+                    <option value="">-- Select Panchayat --</option>
+                </select>
+            </div>
+
+            <button id="btn-submit" class="btn-primary full-width mt-4" disabled>Get Forecast Data</button>
+        </aside>
+
+        <!-- Zone B: Map Placeholder -->
+        <!-- Zone B: Interactive GIS Map -->
+        <section class="card map-section">
+            <div class="selector-header">
+                <h3>GIS & Bhuvan Panchayat Map</h3>
+                <div class="layer-controls">
+                    <button class="layer-btn active" data-layer="standard">🗺️ Map</button>
+                    <button class="layer-btn" data-layer="satellite">🛰️ Satellite</button>
+                    <button class="layer-btn" data-layer="roads">🛣️ Bhuvan Roads</button>
+                    <button class="layer-btn" data-layer="settlements">🏘️ Bhuvan Settlements</button>
+                </div>
+            </div>
+            
+            <!-- Map renders here -->
+            <div id="map"></div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p>© 2026 Ministry of Earth Sciences, Government of India. All Rights Reserved.</p>
+            <p>Designed for Mission Mausam.</p>
+        </div>
+    </footer>
+
+    <!-- Zone C: Downscaled Weather Data & Agromet Advisories (Hidden initially) -->
+    <section id="forecast-results" class="container results-container" style="display: none;">
+        <div class="card results-header-card">
+            <h2 id="result-title">Weather & Agromet Advisory for Selected Panchayat</h2>
+            <p class="subtitle">Weather forecast with Bhuvan Panchayat geospatial layers from NRSC/ISRO.</p>
+        </div>
+
+        <div class="results-grid">
+            <!-- Current Conditions Card -->
+            <div class="card current-weather-card">
+                <h3>Current Conditions</h3>
+                <div class="temp-display">
+                    <span id="current-temp">--</span><span class="unit">°C</span>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <span class="label">Humidity</span>
+                        <span id="current-humidity" class="value">--%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="label">Wind Speed</span>
+                        <span id="current-wind" class="value">-- km/h</span>
+                    </div>
+                    <div class="metric">
+                        <span class="label">Soil Moisture</span>
+                        <span id="current-soil" class="value">--%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agromet Advisory Box (Critical for Farmers) -->
+            <div id="advisory-card" class="card advisory-box normal">
+                <div class="advisory-header">
+                    <span class="advisory-badge" id="advisory-status">Normal</span>
+                    <h3>Agro-Meteorological Advisory</h3>
+                </div>
+                <p id="advisory-text">Select a location to view custom agricultural advisories.</p>
+            </div>
+        </div>
+
+         <!-- 7-Day Forecast Section -->
+        <div class="card mt-4">
+            <h3 class="mb-3">7-Day Downscaled Trend Analysis</h3>
+            <div id="forecast-7-days" class="forecast-grid mt-3"></div>
+            <div class="weather-chart-wrapper" style="margin-top:24px;">
+                <canvas id="weatherChart" aria-label="7-day temperature trend chart"></canvas>
+            </div>
+        </div>
+    </section>
+   <script src="./script.js"></script>
+    
+    
+</body>
+</html>
