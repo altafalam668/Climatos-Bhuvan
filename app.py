@@ -189,34 +189,81 @@ async def get_panchayat_forecast(lat: float, lon: float):
             })
 
 
-        return {
+               # -----------------------------
+        # Climate Risk Analysis
+        # -----------------------------
 
+        total_rainfall = sum(
+            day.get("rainfall_mm", 0) or 0
+            for day in forecast_7_day
+        )
+
+        max_forecast_temp = max(
+            [day.get("max_temp", 0) or 0 for day in forecast_7_day],
+            default=0
+        )
+
+        # Rainfall Risk
+        if rainfall_today >= 20:
+            rainfall_risk = "High"
+        elif rainfall_today >= 10:
+            rainfall_risk = "Moderate"
+        else:
+            rainfall_risk = "Low"
+
+        # Heat Risk
+        if max_forecast_temp >= 40:
+            heat_risk = "High"
+        elif max_forecast_temp >= 35:
+            heat_risk = "Moderate"
+        else:
+            heat_risk = "Low"
+
+        # Agricultural Risk
+        if rainfall_today >= 20 or temp >= 40:
+            agriculture_risk = "High"
+        elif rainfall_today >= 10 or temp >= 35:
+            agriculture_risk = "Moderate"
+        else:
+            agriculture_risk = "Low"
+
+        # Soil / Water Condition
+        if soil_moisture_pct >= 60:
+            soil_condition = "High Moisture"
+        elif soil_moisture_pct >= 30:
+            soil_condition = "Normal"
+        else:
+            soil_condition = "Low Moisture"
+
+        return {
             "location": {
                 "lat": lat,
                 "lon": lon
             },
 
             "current": {
-
                 "temperature_c": temp,
-
                 "humidity_percent": humidity,
-
                 "wind_speed_kmh": wind_speed,
-
-                "soil_moisture_percent":
-                    soil_moisture_pct
+                "soil_moisture_percent": soil_moisture_pct
             },
 
             "agromet_advisory": {
-
                 "status": advisory_status,
-
                 "message": advisory_msg
             },
 
-            "forecast_7_day":
-                forecast_7_day
+            "climate_risk": {
+                "rainfall_risk": rainfall_risk,
+                "heat_risk": heat_risk,
+                "agriculture_risk": agriculture_risk,
+                "soil_condition": soil_condition,
+                "today_rainfall_mm": rainfall_today,
+                "total_7_day_rainfall_mm": round(total_rainfall, 1),
+                "max_forecast_temperature_c": max_forecast_temp
+            },
+
+            "forecast_7_day": forecast_7_day
         }
 
 

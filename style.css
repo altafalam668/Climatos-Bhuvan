@@ -287,3 +287,144 @@ footer {
 .forecast-card .max { color: #dc2626; }
 .forecast-card .min { color: #2563eb; }
 .forecast-card .rain { font-size: 11px; color: #0284c7; margin-top: 4px; }
+
+/* =============================
+   Rainfall Chart
+   ============================= */
+
+.chart-title {
+    margin-bottom: 15px;
+    color: #003366;
+}
+
+
+/* =============================
+   Climate Risk Dashboard
+   ============================= */
+
+.climate-risk-card {
+    margin-bottom: 40px;
+}
+
+.risk-header {
+    margin-bottom: 20px;
+}
+
+.risk-header h3 {
+    color: #003366;
+    margin-bottom: 5px;
+}
+
+.risk-header p {
+    color: #64748b;
+    font-size: 14px;
+}
+
+
+/* Risk Cards */
+
+.risk-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.risk-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 18px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 8px;
+}
+
+.risk-icon {
+    font-size: 28px;
+}
+
+.risk-label {
+    display: block;
+
+    font-size: 12px;
+
+    color: #64748b;
+
+    margin-bottom: 5px;
+}
+
+.risk-item strong {
+    display: block;
+
+    font-size: 18px;
+
+    color: #003366;
+}
+
+
+/* Risk Summary */
+
+.risk-summary {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 15px;
+
+    margin-top: 20px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid #e2e8f0;
+}
+
+.risk-summary div {
+    padding: 12px;
+
+    background: #f8fafc;
+
+    border-radius: 6px;
+}
+
+.risk-summary span {
+    display: block;
+
+    font-size: 12px;
+
+    color: #64748b;
+
+    margin-bottom: 5px;
+}
+
+.risk-summary strong {
+    font-size: 18px;
+
+    color: #003366;
+}
+
+
+/* Mobile */
+
+@media (max-width: 900px) {
+
+    .risk-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .risk-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .risk-summary {
+        grid-template-columns: 1fr;
+    }
+
+}

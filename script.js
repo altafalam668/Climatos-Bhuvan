@@ -291,6 +291,14 @@ const advisoryText = document.getElementById('advisory-text');
 
 // DOM Elements for 7-day forecast
 const forecast7DaysContainer = document.getElementById('forecast-7-days');
+const rainfallRisk = document.getElementById('rainfall-risk');
+const heatRisk = document.getElementById('heat-risk');
+const agricultureRisk = document.getElementById('agriculture-risk');
+const soilCondition = document.getElementById('soil-condition');
+
+const riskTodayRain = document.getElementById('risk-today-rain');
+const riskTotalRain = document.getElementById('risk-total-rain');
+const riskMaxTemp = document.getElementById('risk-max-temp');
 
 btnSubmit.addEventListener('click', async () => {
     const state = stateSelect.value;
@@ -324,6 +332,34 @@ btnSubmit.addEventListener('click', async () => {
 
         const data = await response.json();
 
+        // -----------------------------
+// Climate Risk Dashboard
+// -----------------------------
+
+if (data.climate_risk) {
+
+    rainfallRisk.textContent =
+        data.climate_risk.rainfall_risk;
+
+    heatRisk.textContent =
+        data.climate_risk.heat_risk;
+
+    agricultureRisk.textContent =
+        data.climate_risk.agriculture_risk;
+
+    soilCondition.textContent =
+        data.climate_risk.soil_condition;
+
+    riskTodayRain.textContent =
+        `${data.climate_risk.today_rainfall_mm} mm`;
+
+    riskTotalRain.textContent =
+        `${data.climate_risk.total_7_day_rainfall_mm} mm`;
+
+    riskMaxTemp.textContent =
+        `${data.climate_risk.max_forecast_temperature_c} °C`;
+}
+
         // 1. Update Title
         resultTitle.textContent = `Weather & Agromet Advisory for ${panchayat}, ${block}, ${district}`;
 
@@ -344,13 +380,14 @@ btnSubmit.addEventListener('click', async () => {
         const daysLabels = [];
         const maxTemps = [];
         const minTemps = [];
+        const rainfallValues = [];
 
         data.forecast_7_day.forEach(day => {
             // Collect data points for the chart graph
             daysLabels.push(day.day);
             maxTemps.push(day.max_temp);
             minTemps.push(day.min_temp);
-
+            rainfallValues.push(day.rainfall_mm);
             // Render visual cards
             const card = document.createElement('div');
             card.className = 'forecast-card';
@@ -399,6 +436,62 @@ btnSubmit.addEventListener('click', async () => {
                 }
             }
         });
+
+        // -----------------------------
+// Rainfall Chart
+// -----------------------------
+
+const rainfallCtx =
+    document.getElementById('rainfallChart').getContext('2d');
+
+if (window.myRainfallChart) {
+    window.myRainfallChart.destroy();
+}
+
+window.myRainfallChart = new Chart(rainfallCtx, {
+    type: 'bar',
+
+    data: {
+        labels: daysLabels,
+
+        datasets: [
+            {
+                label: 'Rainfall (mm)',
+                data: rainfallValues,
+
+                borderWidth: 1
+            }
+        ]
+    },
+
+    options: {
+        responsive: true,
+
+        plugins: {
+            legend: {
+                position: 'top'
+            }
+        },
+
+        scales: {
+            y: {
+                beginAtZero: true,
+
+                title: {
+                    display: true,
+                    text: 'Rainfall (mm)'
+                }
+            },
+
+            x: {
+                title: {
+                    display: true,
+                    text: 'Day'
+                }
+            }
+        }
+    }
+});
 // 5. Reveal the results container smoothly
         resultsSection.style.display = "block";
         resultsSection.scrollIntoView({ behavior: 'smooth' });
