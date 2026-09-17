@@ -29,6 +29,16 @@ const blockSelect = document.getElementById('block');
 const panchayatSelect = document.getElementById('panchayat');
 const btnSubmit = document.getElementById('btn-submit');
 const btnLocation = document.getElementById('btn-location');
+// Panchayat location information
+const panchayatInfoName = document.getElementById('panchayat-info-name');
+const panchayatInfoPath = document.getElementById('panchayat-info-path');
+
+const infoState = document.getElementById('info-state');
+const infoDistrict = document.getElementById('info-district');
+const infoBlock = document.getElementById('info-block');
+const infoLat = document.getElementById('info-lat');
+const infoLon = document.getElementById('info-lon');
+const infoStatus = document.getElementById('info-status');
 
 // Helper function to populate a dropdown
 function populateDropdown(selectElement, optionsArray, defaultText) {
@@ -171,29 +181,81 @@ const panchayatCoords = {
 };
 
 // 4. Update the existing Panchayat change event
+// 6. Handle Panchayat Change + Location Information
 panchayatSelect.addEventListener('change', function () {
+
     const selectedPanchayat = this.value;
+
     btnSubmit.disabled = !selectedPanchayat;
 
-    if (selectedPanchayat && panchayatCoords[selectedPanchayat]) {
-        const coords = panchayatCoords[selectedPanchayat];
+    if (!selectedPanchayat) {
+        panchayatInfoName.textContent = "Panchayat Location";
+        panchayatInfoPath.textContent =
+            "Select a Panchayat to view location details.";
 
-        // Smoothly fly to the new coordinates at zoom level 13
+        infoState.textContent = "--";
+        infoDistrict.textContent = "--";
+        infoBlock.textContent = "--";
+        infoLat.textContent = "--";
+        infoLon.textContent = "--";
+        infoStatus.textContent = "--";
+
+        return;
+    }
+
+    const coords = panchayatCoords[selectedPanchayat];
+
+    // Fill administrative information
+    infoState.textContent = stateSelect.value || "--";
+    infoDistrict.textContent = districtSelect.value || "--";
+    infoBlock.textContent = blockSelect.value || "--";
+
+    panchayatInfoName.textContent = selectedPanchayat;
+
+    panchayatInfoPath.textContent =
+        `${blockSelect.value}, ${districtSelect.value}, ${stateSelect.value}`;
+
+    if (coords) {
+
+        const lat = coords[0];
+        const lon = coords[1];
+
+        infoLat.textContent = lat.toFixed(4);
+        infoLon.textContent = lon.toFixed(4);
+
+        infoStatus.textContent = "Coordinate available";
+
+        // Move map
         map.flyTo(coords, 13, {
             duration: 1.5
         });
 
-        // Remove the old marker if it exists
+        // Remove previous marker
         if (currentMarker) {
             map.removeLayer(currentMarker);
         }
 
-        // Drop a new marker with a popup
-        currentMarker = L.marker(coords).addTo(map)
-            .bindPopup(`<b>${selectedPanchayat}</b><br>Forecasting grid location.`)
+        // Add new marker
+        currentMarker = L.marker(coords)
+            .addTo(map)
+            .bindPopup(
+                `<b>${selectedPanchayat}</b><br>
+                 ${blockSelect.value}, ${districtSelect.value}<br>
+                 Lat: ${lat.toFixed(4)}<br>
+                 Lon: ${lon.toFixed(4)}`
+            )
             .openPopup();
+
+    } else {
+
+        infoLat.textContent = "--";
+        infoLon.textContent = "--";
+        infoStatus.textContent = "Coordinates unavailable";
     }
 });
+
+
+
 
 // --- Climatos + Bhuvan Panchayat Map Layers ---
 

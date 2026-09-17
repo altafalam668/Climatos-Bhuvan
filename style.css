@@ -335,12 +335,12 @@ footer {
     border-left: 6px solid #10b981;
 }
 
-.advisory-box.Alert {
+.advisory-box.advisory {
     border-left-color: #f59e0b;
     background-color: #fffbeb;
 }
 
-.advisory-box.Warning {
+.advisory-box.warning {
     border-left-color: #ef4444;
     background-color: #fef2f2;
 }
@@ -361,11 +361,11 @@ footer {
     color: white;
 }
 
-.advisory-box.Alert .advisory-badge {
+.advisory-box.advisory .advisory-badge {
     background: #f59e0b;
 }
 
-.advisory-box.Warning .advisory-badge {
+.advisory-box.warning .advisory-badge {
     background: #ef4444;
 }
 
@@ -581,4 +581,77 @@ footer {
         grid-template-columns: 1fr;
     }
 
+}
+
+/* =============================
+   Panchayat Location Information
+   ============================= */
+
+.panchayat-info {
+    margin-top: 15px;
+    padding: 16px;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+}
+
+.panchayat-info-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.panchayat-info-header>span {
+    font-size: 28px;
+}
+
+.panchayat-info-header h4 {
+    margin: 0;
+    color: #003366;
+    font-size: 17px;
+}
+
+.panchayat-info-header p {
+    margin-top: 4px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.panchayat-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.panchayat-info-grid div {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 10px;
+}
+
+.panchayat-info-grid span {
+    display: block;
+    font-size: 11px;
+    color: #64748b;
+    margin-bottom: 4px;
+}
+
+.panchayat-info-grid strong {
+    display: block;
+    color: #1e293b;
+    font-size: 14px;
+}
+
+@media (max-width: 700px) {
+    .panchayat-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 450px) {
+    .panchayat-info-grid {
+        grid-template-columns: 1fr;
+    }
 }
