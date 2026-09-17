@@ -47,14 +47,14 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // 2. Handle State Change
-stateSelect.addEventListener('change', function() {
+stateSelect.addEventListener('change', function () {
     const state = this.value;
-    
+
     // Reset downstream dropdowns
     populateDropdown(districtSelect, [], "Select District");
     populateDropdown(blockSelect, [], "Select Block");
     populateDropdown(panchayatSelect, [], "Select Panchayat");
-    
+
     districtSelect.disabled = true;
     blockSelect.disabled = true;
     panchayatSelect.disabled = true;
@@ -68,13 +68,13 @@ stateSelect.addEventListener('change', function() {
 });
 
 // 3. Handle District Change
-districtSelect.addEventListener('change', function() {
+districtSelect.addEventListener('change', function () {
     const state = stateSelect.value;
     const district = this.value;
 
     populateDropdown(blockSelect, [], "Select Block");
     populateDropdown(panchayatSelect, [], "Select Panchayat");
-    
+
     blockSelect.disabled = true;
     panchayatSelect.disabled = true;
     btnSubmit.disabled = true;
@@ -87,7 +87,7 @@ districtSelect.addEventListener('change', function() {
 });
 
 // 4. Handle Block Change
-blockSelect.addEventListener('change', function() {
+blockSelect.addEventListener('change', function () {
     const state = stateSelect.value;
     const district = districtSelect.value;
     const block = this.value;
@@ -104,7 +104,7 @@ blockSelect.addEventListener('change', function() {
 });
 
 // 5. Handle Panchayat Change
-panchayatSelect.addEventListener('change', function() {
+panchayatSelect.addEventListener('change', function () {
     btnSubmit.disabled = !this.value; // Enable submit button if a panchayat is selected
 });
 
@@ -158,7 +158,7 @@ const panchayatCoords = {
     "Manjri": [18.5080, 73.9720],
     "Alandi": [18.6750, 73.8950],
     "Chakan": [18.7500, 73.8500],
-    
+
     // Newly added panchayats coordinates
     "Singheshwarsthan": [26.0231, 86.8201],
     "Rampur": [26.0100, 86.8050],
@@ -171,23 +171,23 @@ const panchayatCoords = {
 };
 
 // 4. Update the existing Panchayat change event
-panchayatSelect.addEventListener('change', function() {
+panchayatSelect.addEventListener('change', function () {
     const selectedPanchayat = this.value;
     btnSubmit.disabled = !selectedPanchayat;
 
     if (selectedPanchayat && panchayatCoords[selectedPanchayat]) {
         const coords = panchayatCoords[selectedPanchayat];
-        
+
         // Smoothly fly to the new coordinates at zoom level 13
         map.flyTo(coords, 13, {
-            duration: 1.5 
+            duration: 1.5
         });
-        
+
         // Remove the old marker if it exists
         if (currentMarker) {
             map.removeLayer(currentMarker);
         }
-        
+
         // Drop a new marker with a popup
         currentMarker = L.marker(coords).addTo(map)
             .bindPopup(`<b>${selectedPanchayat}</b><br>Forecasting grid location.`)
@@ -195,7 +195,7 @@ panchayatSelect.addEventListener('change', function() {
     }
 });
 
- // --- Climatos + Bhuvan Panchayat Map Layers ---
+// --- Climatos + Bhuvan Panchayat Map Layers ---
 
 // Base map
 const defaultMapLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -230,9 +230,31 @@ const bhuvanSettlementsLayer = L.tileLayer.wms(bhuvanWmsUrl, {
     version: '1.1.1',
     attribution: 'Bhuvan Panchayat / NRSC-ISRO'
 });
+// Bhuvan Panchayat Land Use / Land Cover
+const bhuvanLulcLayer = L.tileLayer.wms(bhuvanWmsUrl, {
+    layers: 'SISDP_P2:LULC_PHASE_II',
+    format: 'image/png',
+    transparent: true,
+    version: '1.1.1',
+    attribution: 'Bhuvan Panchayat / NRSC-ISRO'
+});
+
+// Bhuvan Panchayat Drainage & Water Bodies
+const bhuvanWaterLayer = L.tileLayer.wms(bhuvanWmsUrl, {
+    layers: 'SISDP_P2:DRAIN_PHASE_II',
+    format: 'image/png',
+    transparent: true,
+    version: '1.1.1',
+    attribution: 'Bhuvan Panchayat / NRSC-ISRO'
+});
 
 // Keep Bhuvan overlays together so switching modes does not leave stale layers.
-const bhuvanOverlays = [bhuvanRoadsLayer, bhuvanSettlementsLayer];
+const bhuvanOverlays = [
+    bhuvanRoadsLayer,
+    bhuvanSettlementsLayer,
+    bhuvanLulcLayer,
+    bhuvanWaterLayer
+];
 
 function removeBhuvanOverlays() {
     bhuvanOverlays.forEach(layer => {
@@ -257,15 +279,37 @@ layerBtns.forEach(btn => {
         removeBhuvanOverlays();
 
         if (layerType === 'satellite') {
+
             setBaseLayer(satelliteLayer);
+
         } else if (layerType === 'roads') {
+
             setBaseLayer(defaultMapLayer);
+
             bhuvanRoadsLayer.addTo(map);
+
         } else if (layerType === 'settlements') {
+
             setBaseLayer(defaultMapLayer);
+
             bhuvanSettlementsLayer.addTo(map);
-        } else {
+
+        } else if (layerType === 'lulc') {
+
             setBaseLayer(defaultMapLayer);
+
+            bhuvanLulcLayer.addTo(map);
+
+        } else if (layerType === 'water') {
+
+            setBaseLayer(defaultMapLayer);
+
+            bhuvanWaterLayer.addTo(map);
+
+        } else {
+
+            setBaseLayer(defaultMapLayer);
+
         }
     });
 });
@@ -326,39 +370,39 @@ btnSubmit.addEventListener('click', async () => {
             try {
                 const errorBody = await response.json();
                 if (errorBody.detail) detail += `: ${errorBody.detail}`;
-            } catch (_) {}
+            } catch (_) { }
             throw new Error(detail);
         }
 
         const data = await response.json();
 
         // -----------------------------
-// Climate Risk Dashboard
-// -----------------------------
+        // Climate Risk Dashboard
+        // -----------------------------
 
-if (data.climate_risk) {
+        if (data.climate_risk) {
 
-    rainfallRisk.textContent =
-        data.climate_risk.rainfall_risk;
+            rainfallRisk.textContent =
+                data.climate_risk.rainfall_risk;
 
-    heatRisk.textContent =
-        data.climate_risk.heat_risk;
+            heatRisk.textContent =
+                data.climate_risk.heat_risk;
 
-    agricultureRisk.textContent =
-        data.climate_risk.agriculture_risk;
+            agricultureRisk.textContent =
+                data.climate_risk.agriculture_risk;
 
-    soilCondition.textContent =
-        data.climate_risk.soil_condition;
+            soilCondition.textContent =
+                data.climate_risk.soil_condition;
 
-    riskTodayRain.textContent =
-        `${data.climate_risk.today_rainfall_mm} mm`;
+            riskTodayRain.textContent =
+                `${data.climate_risk.today_rainfall_mm} mm`;
 
-    riskTotalRain.textContent =
-        `${data.climate_risk.total_7_day_rainfall_mm} mm`;
+            riskTotalRain.textContent =
+                `${data.climate_risk.total_7_day_rainfall_mm} mm`;
 
-    riskMaxTemp.textContent =
-        `${data.climate_risk.max_forecast_temperature_c} °C`;
-}
+            riskMaxTemp.textContent =
+                `${data.climate_risk.max_forecast_temperature_c} °C`;
+        }
 
         // 1. Update Title
         resultTitle.textContent = `Weather & Agromet Advisory for ${panchayat}, ${block}, ${district}`;
@@ -375,7 +419,7 @@ if (data.climate_risk) {
         advisoryStatus.textContent = status;
         advisoryText.textContent = data.agromet_advisory.message;
 
-                // 4. Render 7-Day Forecast Cards & Chart
+        // 4. Render 7-Day Forecast Cards & Chart
         forecast7DaysContainer.innerHTML = "";
         const daysLabels = [];
         const maxTemps = [];
@@ -438,61 +482,61 @@ if (data.climate_risk) {
         });
 
         // -----------------------------
-// Rainfall Chart
-// -----------------------------
+        // Rainfall Chart
+        // -----------------------------
 
-const rainfallCtx =
-    document.getElementById('rainfallChart').getContext('2d');
+        const rainfallCtx =
+            document.getElementById('rainfallChart').getContext('2d');
 
-if (window.myRainfallChart) {
-    window.myRainfallChart.destroy();
-}
+        if (window.myRainfallChart) {
+            window.myRainfallChart.destroy();
+        }
 
-window.myRainfallChart = new Chart(rainfallCtx, {
-    type: 'bar',
+        window.myRainfallChart = new Chart(rainfallCtx, {
+            type: 'bar',
 
-    data: {
-        labels: daysLabels,
+            data: {
+                labels: daysLabels,
 
-        datasets: [
-            {
-                label: 'Rainfall (mm)',
-                data: rainfallValues,
+                datasets: [
+                    {
+                        label: 'Rainfall (mm)',
+                        data: rainfallValues,
 
-                borderWidth: 1
-            }
-        ]
-    },
-
-    options: {
-        responsive: true,
-
-        plugins: {
-            legend: {
-                position: 'top'
-            }
-        },
-
-        scales: {
-            y: {
-                beginAtZero: true,
-
-                title: {
-                    display: true,
-                    text: 'Rainfall (mm)'
-                }
+                        borderWidth: 1
+                    }
+                ]
             },
 
-            x: {
-                title: {
-                    display: true,
-                    text: 'Day'
+            options: {
+                responsive: true,
+
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    }
+                },
+
+                scales: {
+                    y: {
+                        beginAtZero: true,
+
+                        title: {
+                            display: true,
+                            text: 'Rainfall (mm)'
+                        }
+                    },
+
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Day'
+                        }
+                    }
                 }
             }
-        }
-    }
-});
-// 5. Reveal the results container smoothly
+        });
+        // 5. Reveal the results container smoothly
         resultsSection.style.display = "block";
         resultsSection.scrollIntoView({ behavior: 'smooth' });
 
@@ -532,12 +576,12 @@ languageSelect.addEventListener('change', (e) => {
         // Keep the dynamic panchayat name if already selected, just update static headers
         resultTitleEl.textContent = t.resultsTitle;
     }
-    
+
     const resultsSubtitle = document.querySelector('.results-header-card .subtitle');
     if (resultsSubtitle) resultsSubtitle.textContent = t.resultsSubtitle;
 
     document.querySelector('.current-weather-card h3').textContent = t.currentConditions;
-    
+
     // Translate metric labels
     const metricLabels = document.querySelectorAll('.metric .label');
     if (metricLabels.length >= 3) {
@@ -547,8 +591,7 @@ languageSelect.addEventListener('change', (e) => {
     }
 
     document.querySelector('.advisory-box h3').textContent = t.advisoryHeading;
-    
+
     const forecastHeading = document.querySelector('#forecast-results .card.mt-4 h3');
     if (forecastHeading) forecastHeading.textContent = t.forecastHeading;
 });
- 

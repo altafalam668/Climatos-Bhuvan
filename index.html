@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,10 +11,11 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-     
+
 </head>
-    
+
 </head>
+
 <body>
     <!-- Header -->
     <header>
@@ -54,9 +56,9 @@
     <!-- Breadcrumbs -->
     <nav class="breadcrumbs" aria-label="Breadcrumb">
         <div class="container">
-            <a href="#">Home</a> &gt; 
-            <a href="#">Schemes and Services</a> &gt; 
-            <a href="#">Mission Mausam</a> &gt; 
+            <a href="#">Home</a> &gt;
+            <a href="#">Schemes and Services</a> &gt;
+            <a href="#">Mission Mausam</a> &gt;
             <span>Panchayat-Level Forecast</span>
         </div>
     </nav>
@@ -69,7 +71,7 @@
                 <h3>Select Location</h3>
                 <button id="btn-location" class="btn-primary small-btn">Use My Location</button>
             </div>
-            
+
             <div class="form-group">
                 <label for="state">State</label>
                 <select id="state">
@@ -111,9 +113,11 @@
                     <button class="layer-btn" data-layer="satellite">🛰️ Satellite</button>
                     <button class="layer-btn" data-layer="roads">🛣️ Bhuvan Roads</button>
                     <button class="layer-btn" data-layer="settlements">🏘️ Bhuvan Settlements</button>
+                    <button class="layer-btn" data-layer="lulc"> 🌾 Land Use</button>
+                    <button class="layer-btn" data-layer="water">💧 Water Bodies</button> ̰
                 </div>
             </div>
-            
+
             <!-- Map renders here -->
             <div id="map"></div>
         </section>
@@ -167,98 +171,95 @@
             </div>
         </div>
 
-         <!-- 7-Day Forecast Section -->
+        <!-- 7-Day Forecast Section -->
         <div class="card mt-4">
-    <h3 class="mb-3">7-Day Weather & Rainfall Analysis</h3>
+            <h3 class="mb-3">7-Day Weather & Rainfall Analysis</h3>
 
-    <div id="forecast-7-days" class="forecast-grid mt-3"></div>
+            <div id="forecast-7-days" class="forecast-grid mt-3"></div>
 
-    <div class="weather-chart-wrapper" style="margin-top:24px;">
-        <canvas
-            id="weatherChart"
-            aria-label="7-day temperature trend chart">
-        </canvas>
-    </div>
+            <div class="weather-chart-wrapper" style="margin-top:24px;">
+                <canvas id="weatherChart" aria-label="7-day temperature trend chart">
+                </canvas>
+            </div>
 
-    <div class="weather-chart-wrapper" style="margin-top:35px;">
-        <h3 class="chart-title">7-Day Rainfall Analysis</h3>
+            <div class="weather-chart-wrapper" style="margin-top:35px;">
+                <h3 class="chart-title">7-Day Rainfall Analysis</h3>
 
-        <canvas
-            id="rainfallChart"
-            aria-label="7-day rainfall chart">
-        </canvas>
-    </div>
-</div>
-
-<!-- Climate Risk Dashboard -->
-<div class="card climate-risk-card mt-4">
-
-    <div class="risk-header">
-        <div>
-            <h3>⚠️ Climate Risk Dashboard</h3>
-            <p>Weather-based risk indicators for the selected Panchayat.</p>
-        </div>
-    </div>
-
-    <div class="risk-grid">
-
-        <div class="risk-item">
-            <div class="risk-icon">🌧️</div>
-            <div>
-                <span class="risk-label">Rainfall Risk</span>
-                <strong id="rainfall-risk">--</strong>
+                <canvas id="rainfallChart" aria-label="7-day rainfall chart">
+                </canvas>
             </div>
         </div>
 
-        <div class="risk-item">
-            <div class="risk-icon">🌡️</div>
-            <div>
-                <span class="risk-label">Heat Risk</span>
-                <strong id="heat-risk">--</strong>
+        <!-- Climate Risk Dashboard -->
+        <div class="card climate-risk-card mt-4">
+
+            <div class="risk-header">
+                <div>
+                    <h3>⚠️ Climate Risk Dashboard</h3>
+                    <p>Weather-based risk indicators for the selected Panchayat.</p>
+                </div>
             </div>
-        </div>
 
-        <div class="risk-item">
-            <div class="risk-icon">🌾</div>
-            <div>
-                <span class="risk-label">Agricultural Risk</span>
-                <strong id="agriculture-risk">--</strong>
+            <div class="risk-grid">
+
+                <div class="risk-item">
+                    <div class="risk-icon">🌧️</div>
+                    <div>
+                        <span class="risk-label">Rainfall Risk</span>
+                        <strong id="rainfall-risk">--</strong>
+                    </div>
+                </div>
+
+                <div class="risk-item">
+                    <div class="risk-icon">🌡️</div>
+                    <div>
+                        <span class="risk-label">Heat Risk</span>
+                        <strong id="heat-risk">--</strong>
+                    </div>
+                </div>
+
+                <div class="risk-item">
+                    <div class="risk-icon">🌾</div>
+                    <div>
+                        <span class="risk-label">Agricultural Risk</span>
+                        <strong id="agriculture-risk">--</strong>
+                    </div>
+                </div>
+
+                <div class="risk-item">
+                    <div class="risk-icon">💧</div>
+                    <div>
+                        <span class="risk-label">Soil Condition</span>
+                        <strong id="soil-condition">--</strong>
+                    </div>
+                </div>
+
             </div>
-        </div>
 
-        <div class="risk-item">
-            <div class="risk-icon">💧</div>
-            <div>
-                <span class="risk-label">Soil Condition</span>
-                <strong id="soil-condition">--</strong>
+            <div class="risk-summary">
+
+                <div>
+                    <span>Today's Rainfall</span>
+                    <strong id="risk-today-rain">-- mm</strong>
+                </div>
+
+                <div>
+                    <span>7-Day Rainfall</span>
+                    <strong id="risk-total-rain">-- mm</strong>
+                </div>
+
+                <div>
+                    <span>Maximum Temperature</span>
+                    <strong id="risk-max-temp">-- °C</strong>
+                </div>
+
             </div>
+
         </div>
-
-    </div>
-
-    <div class="risk-summary">
-
-        <div>
-            <span>Today's Rainfall</span>
-            <strong id="risk-today-rain">-- mm</strong>
-        </div>
-
-        <div>
-            <span>7-Day Rainfall</span>
-            <strong id="risk-total-rain">-- mm</strong>
-        </div>
-
-        <div>
-            <span>Maximum Temperature</span>
-            <strong id="risk-max-temp">-- °C</strong>
-        </div>
-
-    </div>
-
-</div>
     </section>
-   <script src="./script.js"></script>
-    
-    
+    <script src="./script.js"></script>
+
+
 </body>
+
 </html>
