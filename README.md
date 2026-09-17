@@ -1,255 +1,325 @@
-# Climatos
-🌦️ Climatos
+# 🌦️ Climatos
 
-Climatos is a modern weather-based web application designed to provide users with useful climate and weather information through a simple, clean, and user-friendly interface.
+### Panchayat-Level Weather, Climate Risk & Agricultural Advisory Dashboard
 
-The project combines a HTML/CSS/JavaScript frontend with a FastAPI (Python) backend to create a responsive and interactive web experience.
+Climatos is a web-based weather and climate dashboard designed to provide
+Panchayat-level environmental information using weather data, mapping
+services and agricultural advisory features.
 
----
-
-🚀 Features
-
-- 🌤️ Weather information
-- 📍 Location-based weather search
-- 🌡️ Temperature information
-- 💨 Weather-related details
-- 📱 Responsive user interface
-- ⚡ FastAPI backend
-- 🔗 Frontend and backend API integration
-- 📊 Interactive weather presentation
-- 🖥️ Simple and modern UI
+The project combines a FastAPI backend with a responsive HTML/CSS/JavaScript
+frontend.
 
 ---
 
-🛠️ Technologies Used
+## 🚀 Features
 
-Frontend
+### 📍 Panchayat-Level Location Selection
+
+Users can select:
+
+- State
+- District
+- Block
+- Panchayat
+
+The selected Panchayat is displayed on the interactive map along with its
+available coordinates.
+
+---
+
+### 🗺️ Interactive Map
+
+Climatos uses Leaflet for interactive mapping.
+
+Available map options include:
+
+- OpenStreetMap
+- Satellite imagery
+- Bhuvan Roads
+- Bhuvan Settlements
+- Bhuvan Land Use / Land Cover
+- Bhuvan Drainage & Water Bodies
+
+Bhuvan Panchayat services are provided through the official NRSC/ISRO
+Bhuvan Panchayat WMS service.
+
+---
+
+### 🧭 Panchayat Boundary Support
+
+The frontend contains a GeoJSON-based Panchayat boundary system.
+
+The application can:
+
+- Display a Panchayat boundary
+- Remove the previous boundary when the Panchayat changes
+- Automatically fit the map to the boundary
+- Display the Panchayat location marker
+
+Actual Panchayat boundary GeoJSON data can be connected when the official
+boundary dataset is available.
+
+---
+
+## 🌤️ Weather Dashboard
+
+After selecting a Panchayat, Climatos retrieves weather information through
+the FastAPI backend.
+
+The dashboard displays:
+
+- Current temperature
+- Humidity
+- Wind speed
+- Soil moisture
+- 7-day weather forecast
+- Daily rainfall
+- Minimum temperature
+- Maximum temperature
+- Weather conditions
+
+---
+
+## 📊 Interactive Weather Charts
+
+Climatos uses Chart.js to display weather trends.
+
+### Temperature Trend
+
+The dashboard displays:
+
+- Maximum temperature
+- Minimum temperature
+- 7-day trend
+
+### Rainfall Trend
+
+A rainfall bar chart displays expected rainfall for each forecast day.
+
+---
+
+## ⚠️ Climate Risk Dashboard
+
+The Climate Risk Dashboard provides weather-based indicators for the
+selected Panchayat.
+
+It includes:
+
+- Rainfall Risk
+- Heat Risk
+- Agricultural Risk
+- Soil Condition
+- Today's Rainfall
+- 7-Day Rainfall
+- Maximum Forecast Temperature
+
+---
+
+# 🌾 Crop Advisory
+
+Climatos now includes a Panchayat Crop Advisory module.
+
+Users can select a crop and receive a weather-based recommendation using
+the latest weather data retrieved for the selected Panchayat.
+
+### Supported Crops
+
+- Rice
+- Wheat
+- Maize
+- Potato
+- Mustard
+- Vegetables
+
+### Advisory Information
+
+The Crop Advisory section displays:
+
+- Crop Condition
+- Weather-based Recommendation
+- Current Temperature
+- 7-Day Rainfall
+- Soil Moisture
+
+The crop selection updates the recommendation without requiring another
+weather API request.
+
+> Note: The current crop recommendations are simple weather-based project
+> logic intended for dashboard demonstration. They are not a replacement
+> for official agricultural or agrometeorological advice.
+
+---
+
+## 🌱 Agromet Advisory
+
+The dashboard also displays an agricultural weather advisory returned by
+the backend.
+
+The advisory includes:
+
+- Advisory status
+- Advisory message
+
+---
+
+# 🌐 Multi-Language Support
+
+Climatos includes a language selection system for:
+
+- English
+- Hindi
+
+The interface can translate major dashboard labels and controls.
+
+---
+
+# 🛠️ Technology Stack
+
+## Frontend
 
 - HTML5
 - CSS3
 - JavaScript
+- Leaflet.js
+- Chart.js
 
-Backend
+## Backend
 
 - Python
 - FastAPI
 - Uvicorn
 
-Development Tools
+## Weather Data
 
-- VS Code
-- Git
+- Open-Meteo API
+
+## Mapping
+
+- Leaflet
+- OpenStreetMap
+- Esri Satellite
+- Bhuvan Panchayat / NRSC-ISRO WMS
+
+## Deployment
+
 - GitHub
+- Vercel
 
 ---
 
-📁 Project Structure
+# 📁 Project Structure
 
+```text
 Climatos/
 │
-├── backend/
-│   ├── main.py
-│   └── ...
-│
-├── frontend/
-│   ├── index.html
-│   ├── index2.html
-│   ├── style.css
-│   └── script.js
-│
+├── app.py
+├── index.html
+├── script.js
+├── style.css
+├── translations.js
 ├── requirements.txt
+├── vercel.json
 ├── README.md
-└── ...
+│
+└── boundaries/
+    └── panchayats.geojson
 
-«The exact folder structure may vary depending on the current version of the project.»
+    API Endpoints
+Health Check
+GET /api/health
 
----
+Used to check whether the backend is running.
 
-⚙️ Installation & Setup
+Panchayat Forecast
+GET /api/forecast/panchayat?lat=LATITUDE&lon=LONGITUDE
 
-1. Clone the repository
+The endpoint returns weather, forecast, agricultural advisory and climate
+risk information for the supplied coordinates.
 
-git clone https://github.com/YOUR-USERNAME/Climatos.git
+🧪 Testing Workflow
 
-Move into the project folder:
+For local development:
 
-cd Climatos
+Start the FastAPI server.
+Open the Climatos website.
+Select a State.
+Select a District.
+Select a Block.
+Select a Panchayat.
+Click Get Forecast Data.
+Verify current weather.
+Verify the 7-day forecast.
+Verify weather charts.
+Verify Climate Risk Dashboard.
+Scroll to Crop Advisory.
+Select a crop.
+Verify the recommendation.
+Change to another crop and verify that the advisory updates.
 
----
+Bhuvan Integration
 
-2. Create a virtual environment
+Climatos uses the Bhuvan Panchayat SISDP Phase-II WMS service for selected
+map overlays.
 
-python -m venv venv
+The frontend currently supports Bhuvan layers for:
 
-Activate it on macOS/Linux:
+Roads
+Settlements
+Land Use / Land Cover
+Drainage & Water Bodies
 
-source venv/bin/activate
+Panchayat boundary geometry is designed to be supplied through GeoJSON.
 
-On Windows:
+📦 Deployment
 
-venv\Scripts\activate
+The project can be deployed using Vercel.
 
----
+The repository is connected to GitHub so that new commits can trigger
+automatic deployments.
 
-3. Install dependencies
+Development Workflow
 
-pip install -r requirements.txt
-
-If "requirements.txt" is not available yet, install the main dependencies:
-
-pip install fastapi uvicorn
-
----
-
-▶️ Running the Backend
-
-Start the FastAPI server:
-
-uvicorn app:app --reload
-
-The backend should start at:
-
-http://127.0.0.1:8000
-
----
-
-📚 API Documentation
-
-FastAPI automatically provides interactive API documentation.
-
-After starting the server, open:
-
-http://127.0.0.1:8000/docs
-
-You can use the Swagger UI to view and test the available API endpoints.
-
----
-
-🖥️ Running the Frontend
-
-Open the frontend HTML file in your browser or run it using the VS Code Live Server extension.
-
-Make sure the FastAPI backend is running if the frontend communicates with the API.
-
----
-
-🔄 How It Works
-
-User
-  │
-  ▼
-Climatos Frontend
-(HTML + CSS + JavaScript)
-  │
-  ▼
-FastAPI Backend
-  │
-  ▼
-Weather / Climate Data
-  │
-  ▼
-API Response
-  │
-  ▼
-Frontend displays information
-
----
-
-🎯 Project Goals
-
-The main goals of Climatos are:
-
-- Make weather information easy to access.
-- Provide a clean and beginner-friendly interface.
-- Learn frontend and backend integration.
-- Understand how REST APIs work.
-- Build practical experience with FastAPI and JavaScript.
-- Create a deployable real-world web project.
-
----
+Recommended workflow:
+Modify code
+     ↓
+Test on localhost
+     ↓
+git status
+     ↓
+git add .
+     ↓
+git commit
+     ↓
+git push
+     ↓
+GitHub
+     ↓
+Vercel automatic deployment
+     ↓
+Test live website
 
 🔮 Future Improvements
 
-Some features planned for future versions include:
+Possible future improvements include:
 
-- 🌍 More detailed location search
-- 📅 Multi-day weather forecast
-- 📈 Weather data visualization
-- 🌧️ Rain probability
-- 💧 Humidity information
-- 🌬️ Wind information
-- 🌅 Sunrise and sunset information
-- 📍 Automatic location detection
-- 🌙 Dark mode
-- 📱 Improved mobile experience
-- 🤖 AI-based weather insights
+Official Panchayat boundary dataset integration
+More crop types
+More detailed crop-specific advisory
+Improved agricultural recommendations using official agromet guidance
+More weather indicators
+Historical weather analysis
+More climate-risk indicators
+Improved Panchayat search
+Additional Indian languages
+Enhanced mobile responsiveness
+Panchayat-level historical climate trends
 
----
+👨‍💻 Project
 
-👨‍💻 Development
+Climatos
 
-Climatos is being developed as a learning and practical development project, with a focus on understanding:
+A Panchayat-level weather, climate-risk and agricultural advisory
+dashboard.
 
-- Web development
-- REST APIs
-- FastAPI
-- JavaScript
-- Backend integration
-- Deployment
-- Git and GitHub
-
----
-
-📌 Status
-
-🚧 Project Status: In Development
-
-More features and improvements are being added as development continues.
-
----
-
-🤝 Contributing
-
-Contributions, suggestions, and improvements are welcome.
-
-To contribute:
-
-1. Fork the repository.
-2. Create a new branch.
-3. Make your changes.
-4. Commit your changes.
-5. Push the branch.
-6. Create a Pull Request.
-
----
-
-📄 License
-
-This project is currently created for educational and development purposes.
-
----
-
-⭐ If you like Climatos
-
-Give the repository a ⭐ on GitHub and feel free to explore the project!
-
-
-
-## 🛰️ Bhuvan Panchayat Integration
-
-Climatos now includes an optional Bhuvan Panchayat GIS layer in the Leaflet map. The integration uses the official Bhuvan Panchayat SISDP Phase-II WMS service and adds transparent road and settlement layers on top of the map.
-
-- 🗺️ Standard OpenStreetMap base map
-- 🛰️ Satellite base map
-- 🛣️ Bhuvan Panchayat road layer
-- 🏘️ Bhuvan Panchayat settlement layer
-
-The weather API remains separate: FastAPI fetches weather/forecast data while Bhuvan provides geospatial context.
-
-## Vercel Deployment
-
-This version deploys the FastAPI backend and frontend together. Import the repository into Vercel and deploy with the included `vercel.json`. After deployment, test `/api/health`; it should return JSON with `status: ok`.
-
-
-### Frontend asset fix
-The frontend uses relative asset paths (`./style.css`, `./script.js`, `./translations.js`) so it works when served by FastAPI and when opened with a local static server. FastAPI serves the project directory at `/` after the API routes.
+Built using modern web technologies with a focus on localized environmental
+information and decision-support visualization.
