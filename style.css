@@ -817,3 +817,191 @@ footer {
     }
 
 }
+
+/* =========================================
+   STEP 8.2 - Enhanced Crop Advisory
+   ========================================= */
+
+.crop-suitability {
+    margin-top: 18px;
+}
+
+.crop-suitability-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.crop-suitability-header span {
+    font-weight: 600;
+}
+
+.crop-suitability-header strong {
+    font-size: 15px;
+}
+
+.crop-suitability-bar {
+    width: 100%;
+    height: 10px;
+    background: #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#crop-suitability-fill {
+    width: 0%;
+    min-width: 4px;
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.5s ease;
+    background: #16a34a;
+}
+
+
+/* Better crop status card */
+
+.crop-status-card {
+    position: relative;
+    overflow: hidden;
+}
+
+
+/* Four-factor layout */
+
+.crop-factors {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.crop-factor {
+    min-height: 75px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+}
+
+
+/* Responsive layout */
+
+@media (max-width: 900px) {
+    .crop-factors {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+    .crop-factors {
+        grid-template-columns: 1fr;
+    }
+
+    .crop-suitability-header {
+        font-size: 13px;
+    }
+}
+/* =========================================
+   STEP 9.2 - Panchayat Weather Overview
+   ========================================= */
+
+.panchayat-overview-card {
+    margin-bottom: 18px;
+    padding: 22px;
+}
+
+.overview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.overview-header h3 {
+    margin: 0 0 6px;
+}
+
+.overview-header p {
+    margin: 0;
+    color: #64748b;
+}
+
+.overview-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #e2e8f0;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.overview-item {
+    padding: 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #f8fafc;
+}
+
+.overview-label {
+    display: block;
+    margin-bottom: 7px;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.overview-item strong {
+    display: block;
+    color: #0f172a;
+    font-size: 18px;
+}
+
+.overview-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #e2e8f0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.overview-footer strong {
+    color: #334155;
+}
+
+@media (max-width: 900px) {
+    .overview-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+    .overview-header {
+        flex-direction: column;
+    }
+
+    .overview-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .overview-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

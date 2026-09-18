@@ -174,6 +174,61 @@
 
     <!-- Zone C: Downscaled Weather Data & Agromet Advisories (Hidden initially) -->
     <section id="forecast-results" class="container results-container" style="display: none;">
+
+
+
+        <!-- Panchayat Weather Overview -->
+        <div class="card panchayat-overview-card">
+
+            <div class="overview-header">
+                <div>
+                    <h3>📍 Panchayat Weather Overview</h3>
+                    <p id="overview-location-text">
+                        Weather summary for the selected Panchayat.
+                    </p>
+                </div>
+
+                <span id="overview-status" class="overview-status">
+                    Waiting
+                </span>
+            </div>
+
+            <div class="overview-grid">
+
+                <div class="overview-item">
+                    <span class="overview-label">🌾 Panchayat</span>
+                    <strong id="overview-panchayat">--</strong>
+                </div>
+
+                <div class="overview-item">
+                    <span class="overview-label">🌡️ Temperature</span>
+                    <strong id="overview-temperature">--</strong>
+                </div>
+
+                <div class="overview-item">
+                    <span class="overview-label">🌧️ 7-Day Rainfall</span>
+                    <strong id="overview-rainfall">--</strong>
+                </div>
+
+                <div class="overview-item">
+                    <span class="overview-label">💧 Soil Moisture</span>
+                    <strong id="overview-soil">--</strong>
+                </div>
+
+            </div>
+
+            <div class="overview-footer">
+                <span>🕐 Last Updated</span>
+                <strong id="overview-updated">--</strong>
+            </div>
+
+        </div>
+
+        <!-- Existing Results Header -->
+        <div class="card results-header-card">
+            <h2 id="result-title">Weather & Agromet Advisory for Selected Panchayat</h2>
+            <p class="subtitle">Weather forecast with Bhuvan Panchayat geospatial layers from NRSC/ISRO.</p>
+        </div>
         <div class="card results-header-card">
             <h2 id="result-title">Weather & Agromet Advisory for Selected Panchayat</h2>
             <p class="subtitle">Weather forecast with Bhuvan Panchayat geospatial layers from NRSC/ISRO.</p>
@@ -217,6 +272,8 @@
             <h3 class="mb-3">7-Day Weather & Rainfall Analysis</h3>
 
             <div id="forecast-7-days" class="forecast-grid mt-3"></div>
+
+
 
             <div class="weather-chart-wrapper" style="margin-top:24px;">
                 <canvas id="weatherChart" aria-label="7-day temperature trend chart">
@@ -305,7 +362,7 @@
 
             <div class="crop-advisory-header">
                 <div>
-                    <h3>🌾 Panchayat Crop Advisory</h3>
+                    <h3 id="crop-advisory-title">🌾 Panchayat Crop Advisory</h3>
                     <p>
                         Weather-based agricultural recommendations
                         for the selected Panchayat.
@@ -330,15 +387,21 @@
                     </select>
                 </div>
 
-                <!-- Crop Status -->
                 <div class="crop-status-card">
-                    <span class="crop-status-label">
-                        Crop Condition
-                    </span>
+                    <span class="crop-status-label">Crop Condition</span>
 
-                    <strong id="crop-condition">
-                        Select a crop
-                    </strong>
+                    <strong id="crop-condition">Select a crop</strong>
+
+                    <div class="crop-suitability">
+                        <div class="crop-suitability-header">
+                            <span>Crop Suitability</span>
+                            <strong id="crop-suitability-value">--</strong>
+                        </div>
+
+                        <div class="crop-suitability-bar">
+                            <div id="crop-suitability-fill"></div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -358,6 +421,7 @@
             <!-- Weather Factors -->
             <div class="crop-factors">
 
+
                 <div class="crop-factor">
                     <span>🌡️ Temperature</span>
                     <strong id="crop-temp-factor">--</strong>
@@ -371,6 +435,10 @@
                 <div class="crop-factor">
                     <span>💧 Soil Moisture</span>
                     <strong id="crop-soil-factor">--</strong>
+                </div>
+                <div class="crop-factor">
+                    <span>💨 Humidity</span>
+                    <strong id="crop-humidity-factor">--</strong>
                 </div>
 
             </div>
