@@ -143,6 +143,339 @@ btnLocation.addEventListener('click', () => {
 // 1. Initialize map centered on India with a zoom level of 5
 const map = L.map('map').setView([22.5937, 78.9629], 5);
 
+// ==========================================
+// AI DOWNSCALED RAINFALL - 4 KM GRID
+// ==========================================
+
+let downscaledRainLayer = null;
+
+// Rainfall color scale
+function getRainColor(rainfall) {
+    if (rainfall >= 50) return "#800026";
+    if (rainfall >= 30) return "#BD0026";
+    if (rainfall >= 20) return "#E31A1C";
+    if (rainfall >= 10) return "#FD8D3C";
+    if (rainfall >= 5) return "#FEB24C";
+    if (rainfall >= 1) return "#FED976";
+    return "#FFFFCC";
+}
+
+// Load AI 4 km rainfall grid
+async function loadDownscaledRainfall() {
+    try {
+        console.log("Loading AI 4-km rainfall grid...");
+
+        const response = await fetch(
+            "/api/downscaled/grid-clipped"
+        );
+
+        if (!response.ok) {
+            throw new Error("Could not load downscaled GeoJSON");
+        }
+
+        const geojson = await response.json();
+
+        // Remove old layer
+        if (downscaledRainLayer) {
+            map.removeLayer(downscaledRainLayer);
+        }
+
+        downscaledRainLayer = L.geoJSON(geojson, {
+
+            style: function (feature) {
+                const rainfall =
+                    Number(feature.properties.predicted_rainfall_mm) || 0;
+
+                return {
+                    fillColor: getRainColor(rainfall),
+                    fillOpacity: 0.55,
+                    color: "#333",
+                    weight: 0.8
+                };
+            },
+
+            onEachFeature: function (feature, layer) {
+
+                const p = feature.properties;
+
+                layer.bindPopup(`
+                    <div style="min-width:220px">
+                        <h3>🌧️ AI Downscaled Rainfall</h3>
+
+                        <b>Grid:</b> ${p.grid_id || p.name}<br>
+                        <b>Resolution:</b> ${p.cell_km}<br>
+
+                        <hr>
+
+                        <b>Predicted Rainfall:</b>
+                        <span style="font-size:18px">
+                            ${p.predicted_rainfall_mm} mm
+                        </span>
+
+                        <br>
+
+                        <b>Prediction Date:</b>
+                        ${p.prediction_date}
+
+                        <hr>
+
+                        <small>
+                            Method: XGBoost Spatial Downscaling<br>
+                            Status: ${p.data_status}
+                        </small>
+                    </div>
+                `);
+
+                layer.on({
+                    mouseover: function () {
+                        this.setStyle({
+                            weight: 2,
+                            fillOpacity: 0.75
+                        });
+                    },
+
+                    mouseout: function () {
+                        downscaledRainLayer.resetStyle(this);
+                    }
+                });
+            }
+        }).addTo(map);
+
+        console.log(
+            `AI rainfall grid loaded: ${geojson.features.length} cells`
+        );
+
+    } catch (error) {
+        console.error(
+            "Downscaled rainfall loading error:",
+            error
+        );
+    }
+}
+
+// ==========================================
+// AI RAINFALL MAP CONTROL
+// ==========================================
+
+let aiRainfallVisible = true;
+
+
+// ------------------------------------------
+// Rainfall Legend
+// ------------------------------------------
+
+const rainfallLegend = L.control({
+    position: "bottomright"
+});
+
+rainfallLegend.onAdd = function () {
+
+    const div = L.DomUtil.create(
+        "div",
+        "ai-rainfall-legend"
+    );
+
+    div.innerHTML = `
+        <div style="
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            min-width: 150px;
+        ">
+
+            <div style="
+                font-weight: bold;
+                font-size: 14px;
+                margin-bottom: 8px;
+            ">
+                🌧️ AI Rainfall
+            </div>
+
+            <div>
+                <span style="
+                    display:inline-block;
+                    width:18px;
+                    height:12px;
+                    background:#FFFFCC;
+                    margin-right:6px;
+                "></span>
+                0 – 1 mm
+            </div>
+
+            <div>
+                <span style="
+                    display:inline-block;
+                    width:18px;
+                    height:12px;
+                    background:#FED976;
+                    margin-right:6px;
+                "></span>
+                1 – 5 mm
+            </div>
+
+            <div>
+                <span style="
+                    display:inline-block;
+                    width:18px;
+                    height:12px;
+                    background:#FEB24C;
+                    margin-right:6px;
+                "></span>
+                5 – 10 mm
+            </div>
+
+            <div>
+                <span style="
+                    display:inline-block;
+                    width:18px;
+                    height:12px;
+                    background:#FD8D3C;
+                    margin-right:6px;
+                "></span>
+                10 – 20 mm
+            </div>
+
+            <div>
+                <span style="
+                    display:inline-block;
+                    width:18px;
+                    height:12px;
+                    background:#E31A1C;
+                    margin-right:6px;
+                "></span>
+                20 – 30 mm
+            </div>
+
+            <div>
+                <span style="
+                    display:inline-block;
+                    width:18px;
+                    height:12px;
+                    background:#BD0026;
+                    margin-right:6px;
+                "></span>
+                30 – 50 mm
+            </div>
+
+            <div>
+                <span style="
+                    display:inline-block;
+                    width:18px;
+                    height:12px;
+                    background:#800026;
+                    margin-right:6px;
+                "></span>
+                50+ mm
+            </div>
+
+        </div>
+    `;
+
+    return div;
+};
+
+
+// ------------------------------------------
+// AI Rainfall ON/OFF Button
+// ------------------------------------------
+
+const aiRainfallControl = L.control({
+    position: "topright"
+});
+
+aiRainfallControl.onAdd = function () {
+
+    const div = L.DomUtil.create(
+        "div",
+        "ai-rainfall-control"
+    );
+
+    div.innerHTML = `
+        <button
+            id="aiRainfallToggle"
+            style="
+                background:#ffffff;
+                border:none;
+                padding:10px 14px;
+                border-radius:7px;
+                box-shadow:0 2px 8px rgba(0,0,0,0.25);
+                cursor:pointer;
+                font-weight:bold;
+                color:#073b73;
+                font-size:13px;
+            "
+        >
+            🌧️ AI 4-km Rainfall: ON
+        </button>
+    `;
+
+    L.DomEvent.disableClickPropagation(div);
+
+    return div;
+};
+
+
+// Add controls to map
+aiRainfallControl.addTo(map);
+rainfallLegend.addTo(map);
+
+
+// ------------------------------------------
+// Toggle AI Rainfall Layer
+// ------------------------------------------
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        if (
+            event.target &&
+            event.target.id === "aiRainfallToggle"
+        ) {
+
+            const button =
+                event.target;
+
+            if (aiRainfallVisible) {
+
+                // Hide layer
+                if (downscaledRainLayer) {
+                    map.removeLayer(
+                        downscaledRainLayer
+                    );
+                }
+
+                aiRainfallVisible = false;
+
+                button.innerHTML =
+                    "🌧️ AI 4-km Rainfall: OFF";
+
+                button.style.color =
+                    "#666";
+
+            } else {
+
+                // Show layer
+                if (downscaledRainLayer) {
+                    downscaledRainLayer.addTo(map);
+                }
+
+                aiRainfallVisible = true;
+
+                button.innerHTML =
+                    "🌧️ AI 4-km Rainfall: ON";
+
+                button.style.color =
+                    "#073b73";
+            }
+        }
+    }
+);
+loadDownscaledRainfall();
+
 // 2. Add OpenStreetMap Base Layer
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18,
@@ -887,6 +1220,35 @@ btnSubmit.addEventListener('click', async () => {
         }
 
         const data = await response.json();
+
+        // =========================================
+        // Climatos XGBoost Downscaled Rainfall
+        // =========================================
+
+        let downscaledData = null;
+
+        try {
+            const downscaleResponse = await fetch(
+                `/api/downscaled/panchayat?name=${encodeURIComponent(panchayat)}`
+            );
+
+            if (downscaleResponse.ok) {
+                downscaledData = await downscaleResponse.json();
+
+                console.log("XGBoost Downscaled Data:", downscaledData);
+            } else {
+                console.warn(
+                    "Downscaled rainfall API returned:",
+                    downscaleResponse.status
+                );
+            }
+
+        } catch (error) {
+            console.warn(
+                "XGBoost downscaling request failed:",
+                error
+            );
+        }
 
 
         // Save latest weather data for Crop Advisory

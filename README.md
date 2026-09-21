@@ -1,17 +1,56 @@
-# 🌦️ Climatos
+ # 🌦️ Climatos
 
 ### Panchayat-Level Weather, Climate Risk & Agricultural Advisory Dashboard
 
 Climatos is a web-based weather and climate dashboard designed to provide
-Panchayat-level environmental information using weather data, mapping
-services and agricultural advisory features.
+localized Panchayat-level environmental information using weather data,
+geospatial mapping, machine-learning-based rainfall downscaling and
+agricultural advisory features.
 
-The project combines a FastAPI backend with a responsive HTML/CSS/JavaScript
-frontend.
+The project combines a **FastAPI backend** with an HTML/CSS/JavaScript
+frontend and **Leaflet** for interactive geospatial visualization.
 
 ---
 
-## 🚀 Features
+## 🚀 What Makes the Current Version Different?
+
+The current Climatos version adds an experimental **AI rainfall downscaling
+pipeline**.
+
+Instead of displaying only a coarse weather value for a large area, the
+system generates a spatial rainfall field on an approximately **4 km × 4 km
+grid** and visualizes the grid over the selected area.
+
+### Core pipeline
+
+```text
+Coarse Weather Data
+        +
+Weather / Environmental Features
+        ↓
+XGBoost Spatial Downscaling Model
+        ↓
+~4 km × 4 km Rainfall Grid
+        ↓
+Panchayat / Area Aggregation
+        ↓
+Localized Rainfall Visualization
+        ↓
+Weather & Agricultural Decision Support
+```
+
+The current implementation uses **Madhepura, Bihar** as the development
+pilot area.
+
+> ⚠️ **Important:** The current ML training dataset and boundary/grid data are
+> synthetic development data. The displayed model values and development
+> metrics must not be treated as real-world forecast accuracy. Real scientific
+> validation requires historical observations and suitable high-resolution
+> reference data.
+
+---
+
+## ✨ Main Features
 
 ### 📍 Panchayat-Level Location Selection
 
@@ -19,15 +58,15 @@ Users can select:
 
 - State
 - District
-- Block
-- Panchayat
+- Block / Tehsil
+- Gram Panchayat
 
-The selected Panchayat is displayed on the interactive map along with its
-available coordinates.
+The selected Panchayat is displayed on the interactive map with its available
+coordinates.
 
 ---
 
-### 🗺️ Interactive Map
+### 🗺️ Interactive GIS & Bhuvan Map
 
 Climatos uses Leaflet for interactive mapping.
 
@@ -38,26 +77,140 @@ Available map options include:
 - Bhuvan Roads
 - Bhuvan Settlements
 - Bhuvan Land Use / Land Cover
-- Bhuvan Drainage & Water Bodies
+- Bhuvan Water Bodies / Drainage
 
-Bhuvan Panchayat services are provided through the official NRSC/ISRO
-Bhuvan Panchayat WMS service.
+Bhuvan Panchayat services are integrated through the relevant NRSC/ISRO Bhuvan
+WMS services.
 
 ---
 
-### 🧭 Panchayat Boundary Support
+## 🤖 AI 4-km Rainfall Downscaling
 
-The frontend contains a GeoJSON-based Panchayat boundary system.
+The current frontend contains a dedicated **AI 4-km Rainfall** layer.
 
-The application can:
+When enabled, the map displays the downscaled rainfall grid using a color
+scale.
 
-- Display a Panchayat boundary
-- Remove the previous boundary when the Panchayat changes
-- Automatically fit the map to the boundary
-- Display the Panchayat location marker
+Each grid cell can show:
 
-Actual Panchayat boundary GeoJSON data can be connected when the official
-boundary dataset is available.
+- Grid ID
+- Approximate resolution
+- Predicted rainfall in mm
+- Prediction date
+- Model method
+- Data status
+
+Example:
+
+```text
+AI Downscaled Rainfall
+Grid: G0001
+Resolution: ~4×4 km
+Predicted Rainfall: 12.93 mm
+Prediction Date: 2026-09-28
+Method: XGBoost Spatial Downscaling
+```
+
+The frontend consumes the clipped GeoJSON through:
+
+```text
+GET /api/downscaled/grid-clipped
+```
+
+The clipped grid is used so that the displayed 4-km cells follow the
+development boundary rather than showing the entire raw grid.
+
+---
+
+## 🧠 Machine Learning Pipeline
+
+The experimental downscaling model is based on **XGBoost**.
+
+### Development features
+
+The development dataset contains fields such as:
+
+- Coarse rainfall forecast
+- Temperature
+- Humidity
+- Wind speed
+- Soil moisture
+- Satellite rainfall
+- Elevation
+- Latitude
+- Longitude
+- Date / temporal information
+
+The model predicts:
+
+```text
+rainfall_target_mm
+```
+
+and can also be used to derive rainfall-event information.
+
+### Model workflow
+
+```text
+Training Dataset
+      ↓
+Time-aware Train / Validation / Test Split
+      ↓
+Baseline Model
+      ↓
+XGBoost Regressor
+      ↓
+Rainfall Prediction
+      ↓
+4-km Grid GeoJSON
+      ↓
+Map Visualization
+```
+
+---
+
+## 📊 Development Model Test
+
+On the current **synthetic development dataset**, the model test produced:
+
+| Model | MAE | RMSE |
+|---|---:|---:|
+| Baseline | 4.1701 mm | 5.2309 mm |
+| XGBoost | 2.4062 mm | 3.0008 mm |
+
+The development run showed a calculated MAE improvement of approximately
+**42.3% over the baseline**.
+
+> ⚠️ This is a **synthetic development result only**. It is not a claim of
+> 42.3% real-world forecast improvement. Real performance must be measured
+> using independent historical observations and a properly designed
+> time-based validation setup.
+
+---
+
+## 🧮 Panchayat / Area Aggregation
+
+The project also contains an experimental spatial aggregation workflow.
+
+Multiple 4-km grid cells can contribute to an area or Panchayat result using
+an **area-weighted rainfall aggregation** approach.
+
+Conceptually:
+
+```text
+4-km Grid Cells
+      ↓
+Intersect with Panchayat / Area
+      ↓
+Calculate Area Contribution
+      ↓
+Area-Weighted Rainfall
+      ↓
+Localized Panchayat Result
+```
+
+This makes it possible to move from a spatial rainfall field to a
+Panchayat-level summary.
 
 ---
 
@@ -115,12 +268,12 @@ It includes:
 
 ---
 
-# 🌾 Crop Advisory
+## 🌾 Crop Advisory
 
-Climatos now includes a Panchayat Crop Advisory module.
+Climatos includes a Panchayat Crop Advisory module.
 
-Users can select a crop and receive a weather-based recommendation using
-the latest weather data retrieved for the selected Panchayat.
+Users can select a crop and receive a weather-based recommendation using the
+latest weather data retrieved for the selected Panchayat.
 
 ### Supported Crops
 
@@ -141,9 +294,6 @@ The Crop Advisory section displays:
 - 7-Day Rainfall
 - Soil Moisture
 
-The crop selection updates the recommendation without requiring another
-weather API request.
-
 > Note: The current crop recommendations are simple weather-based project
 > logic intended for dashboard demonstration. They are not a replacement
 > for official agricultural or agrometeorological advice.
@@ -162,9 +312,9 @@ The advisory includes:
 
 ---
 
-# 🌐 Multi-Language Support
+## 🌐 Multi-Language Support
 
-Climatos includes a language selection system for:
+Climatos includes language selection for:
 
 - English
 - Hindi
@@ -189,6 +339,14 @@ The interface can translate major dashboard labels and controls.
 - FastAPI
 - Uvicorn
 
+## Machine Learning / Geospatial
+
+- XGBoost
+- GeoJSON
+- Shapely
+- NumPy
+- Joblib
+
 ## Weather Data
 
 - Open-Meteo API
@@ -200,19 +358,21 @@ The interface can translate major dashboard labels and controls.
 - Esri Satellite
 - Bhuvan Panchayat / NRSC-ISRO WMS
 
-## Deployment
+## Version Control / Deployment
 
+- Git
 - GitHub
 - Vercel
 
 ---
 
-# 📁 Project Structure
+# 📁 Current Project Structure
 
 ```text
 Climatos/
 │
 ├── app.py
+├── app_backup.py
 ├── index.html
 ├── script.js
 ├── style.css
@@ -221,105 +381,242 @@ Climatos/
 ├── vercel.json
 ├── README.md
 │
-└── boundaries/
-    └── panchayats.geojson
+├── boundaries/
+│   └── panchayats.geojson
+│
+├── data/
+│   └── processed/
+│       ├── dummy_predictions.csv
+│       ├── madhepura_panchayat_rainfall.geojson
+│       └── madhepura_xgb_prediction_latest.geojson
+│
+├── ml/
+│   ├── train.py
+│   ├── create_grid_prediction.py
+│   └── panchayat_aggregation.py
+│
+├── models/
+│   └── xgb_rainfall_downscaler.joblib
+│
+└── madhepura_*.geojson
+```
 
-    API Endpoints
-Health Check
+---
+
+# 🔌 Important API Endpoints
+
+### Health Check
+
+```text
 GET /api/health
+```
 
 Used to check whether the backend is running.
 
-Panchayat Forecast
+### Panchayat Forecast
+
+```text
 GET /api/forecast/panchayat?lat=LATITUDE&lon=LONGITUDE
+```
 
-The endpoint returns weather, forecast, agricultural advisory and climate
-risk information for the supplied coordinates.
+Returns weather, forecast, agricultural advisory and climate-risk information
+for the supplied coordinates.
 
-🧪 Testing Workflow
+### Downscaled Rainfall Grid
+
+```text
+GET /api/downscaled/grid-clipped
+```
+
+Returns the clipped GeoJSON rainfall grid used by the frontend AI 4-km
+rainfall layer.
+
+---
+
+# 🧪 Local Development
+
+## 1. Create / activate virtual environment
+
+macOS / Linux:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+## 2. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+If working with the current geospatial clipping workflow, Shapely is required:
+
+```bash
+pip install shapely
+```
+
+## 3. Start FastAPI
+
+```bash
+uvicorn app:app --reload
+```
+
+Then open:
+
+```text
+http://127.0.0.1:8000
+```
+
+---
+
+# 🧪 Testing Workflow
 
 For local development:
 
-Start the FastAPI server.
-Open the Climatos website.
-Select a State.
-Select a District.
-Select a Block.
-Select a Panchayat.
-Click Get Forecast Data.
-Verify current weather.
-Verify the 7-day forecast.
-Verify weather charts.
-Verify Climate Risk Dashboard.
-Scroll to Crop Advisory.
-Select a crop.
-Verify the recommendation.
-Change to another crop and verify that the advisory updates.
+1. Start the FastAPI server.
+2. Open the Climatos website.
+3. Select **Bihar**.
+4. Select **Madhepura**.
+5. Select a Block.
+6. Select a Panchayat.
+7. Click **Get Forecast Data**.
+8. Verify current weather.
+9. Verify the 7-day forecast.
+10. Verify temperature and rainfall charts.
+11. Verify the Climate Risk Dashboard.
+12. Verify Crop Advisory.
+13. Enable **AI 4-km Rainfall**.
+14. Verify that the downscaled grid appears on the map.
+15. Click grid cells and verify rainfall, date and model information.
 
-Bhuvan Integration
+---
 
-Climatos uses the Bhuvan Panchayat SISDP Phase-II WMS service for selected
-map overlays.
+# 📦 Development Data Status
 
-The frontend currently supports Bhuvan layers for:
+The current Madhepura ML pipeline is a **development prototype**.
 
-Roads
-Settlements
-Land Use / Land Cover
-Drainage & Water Bodies
+Current development assets include:
 
-Panchayat boundary geometry is designed to be supplied through GeoJSON.
+- Synthetic Madhepura boundary
+- Synthetic Panchayat polygons
+- Synthetic ~4-km grid
+- Synthetic weather training data
+- XGBoost development model
+- Generated rainfall prediction GeoJSON
 
-📦 Deployment
+These assets are useful for testing the complete software pipeline:
 
-The project can be deployed using Vercel.
+```text
+DATA
+ ↓
+MODEL
+ ↓
+PREDICTION
+ ↓
+4-km GRID
+ ↓
+SPATIAL CLIPPING
+ ↓
+PANCHAYAT / AREA AGGREGATION
+ ↓
+LEAFLET VISUALIZATION
+```
 
-The repository is connected to GitHub so that new commits can trigger
-automatic deployments.
+They should not be presented as official Madhepura observations or as
+validated operational forecasts.
 
-Development Workflow
+---
+
+# 🔬 Planned Scientific Validation
+
+The next research stage is to replace the synthetic development data with
+appropriate real historical datasets.
+
+The validation workflow should compare:
+
+```text
+Coarse Forecast
+      VS
+XGBoost Downscaled Forecast
+      VS
+Independent Reference / Observation
+```
+
+Potential evaluation metrics include:
+
+- MAE
+- RMSE
+- Bias
+- Correlation
+- R²
+- Probability of Detection
+- False Alarm Ratio
+- Critical Success Index
+
+Time-based train/validation/test splits should be used for forecasting
+experiments to reduce temporal leakage.
+
+---
+
+# 🔮 Future Improvements
+
+Planned improvements include:
+
+- Real historical weather observations
+- Real high-resolution precipitation/reference datasets
+- Scientific validation of the downscaling model
+- Coarse forecast vs AI-downscaled rainfall comparison
+- Panchayat-wise downscaled rainfall summaries
+- Improved temporal/spatial ML models
+- More crop-specific advisory logic
+- Official Panchayat boundary datasets
+- Historical climate trend analysis
+- Additional Indian languages
+- Improved mobile responsiveness
+- More detailed agricultural risk indicators
+
+---
+
+# 🔄 Development Workflow
 
 Recommended workflow:
-Modify code
-     ↓
-Test on localhost
-     ↓
+
+```text
+Modify Code
+    ↓
+Run / Test on Localhost
+    ↓
+Check API Endpoints
+    ↓
+Check AI 4-km Rainfall Layer
+    ↓
 git status
-     ↓
+    ↓
 git add .
-     ↓
+    ↓
 git commit
-     ↓
+    ↓
 git push
-     ↓
+    ↓
 GitHub
-     ↓
-Vercel automatic deployment
-     ↓
-Test live website
+    ↓
+Vercel Automatic Deployment
+    ↓
+Test Live Website
+```
 
-🔮 Future Improvements
+---
 
-Possible future improvements include:
+# 👨‍💻 Project
 
-Official Panchayat boundary dataset integration
-More crop types
-More detailed crop-specific advisory
-Improved agricultural recommendations using official agromet guidance
-More weather indicators
-Historical weather analysis
-More climate-risk indicators
-Improved Panchayat search
-Additional Indian languages
-Enhanced mobile responsiveness
-Panchayat-level historical climate trends
+## Climatos
 
-👨‍💻 Project
+**Panchayat-Level Weather, Climate Risk & Agricultural Advisory Dashboard**
 
-Climatos
+The current development direction focuses on combining weather forecasting,
+machine learning, geospatial processing and Panchayat-level visualization
+into one decision-support platform.
 
-A Panchayat-level weather, climate-risk and agricultural advisory
-dashboard.
-
-Built using modern web technologies with a focus on localized environmental
-information and decision-support visualization.
+> Built as an experimental engineering project with a focus on localized
+> weather intelligence and spatial rainfall downscaling.

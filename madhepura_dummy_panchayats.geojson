@@ -1,0 +1,746 @@
+{
+  "type": "FeatureCollection",
+  "name": "madhepura_dummy_panchayats",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P001",
+        "district": "Madhepura",
+        "block": "DummyBlock_1",
+        "panchayat": "DummyPanchayat_001",
+        "data_status": "DUMMY_DEVELOPMENT_ONLY"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.55,
+              25.45
+            ],
+            [
+              86.67,
+              25.45
+            ],
+            [
+              86.67,
+              25.6125
+            ],
+            [
+              86.55,
+              25.6125
+            ],
+            [
+              86.55,
+              25.45
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P002",
+        "district": "Madhepura",
+        "block": "DummyBlock_2",
+        "panchayat": "DummyPanchayat_002",
+        "data_status": "DUMMY_DEVELOPMENT_ONLY"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.67,
+              25.45
+            ],
+            [
+              86.79,
+              25.45
+            ],
+            [
+              86.79,
+              25.6125
+            ],
+            [
+              86.67,
+              25.6125
+            ],
+            [
+              86.67,
+              25.45
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P003",
+        "district": "Madhepura",
+        "block": "DummyBlock_3",
+        "panchayat": "DummyPanchayat_003",
+        "data_status": "DUMMY_DEVELOPMENT_ONLY"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.79,
+              25.45
+            ],
+            [
+              86.91,
+              25.45
+            ],
+            [
+              86.91,
+              25.6125
+            ],
+            [
+              86.79,
+              25.6125
+            ],
+            [
+              86.79,
+              25.45
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P004",
+        "district": "Madhepura",
+        "block": "DummyBlock_4",
+        "panchayat": "DummyPanchayat_004",
+        "data_status": "DUMMY_DEVELOPMENT_ONLY"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.91,
+              25.45
+            ],
+            [
+              87.03,
+              25.45
+            ],
+            [
+              87.03,
+              25.6125
+            ],
+            [
+              86.91,
+              25.6125
+            ],
+            [
+              86.91,
+              25.45
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P005",
+        "district": "Madhepura",
+        "block": "DummyBlock_5",
+        "panchayat": "DummyPanchayat_005",
+        "data_status": "DUMMY_DEVELOPMENT_ONLY"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              87.03,
+              25.45
+            ],
+            [
+              87.15,
+              25.45
+            ],
+            [
+              87.15,
+              25.6125
+            ],
+            [
+              87.03,
+              25.6125
+            ],
+            [
+              87.03,
+              25.45
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P006",
+        "district": "Madhepura",
+        "block": "DummyBlock_1",
+        "panchayat": "DummyPanchayat_006",
+        "data_status": "DUMMY_DEVELOPMENT_ONLY"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.55,
+              25.6125
+            ],
+            [
+              86.67,
+              25.6125
+            ],
+            [
+              86.67,
+              25.775
+            ],
+            [
+              86.55,
+              25.775
+            ],
+            [
+              86.55,
+              25.6125
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P007",
+        "district": "Madhepura",
+        "block": "DummyBlock_2",
+        "panchayat": "DummyPanchayat_007",
+        "data_status": "DUMMY_DEVELOPMENT_ONLY"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.67,
+              25.6125
+            ],
+            [
+              86.79,
+              25.6125
+            ],
+            [
+              86.79,
+              25.775
+            ],
+            [
+              86.67,
+              25.775
+            ],
+            [
+              86.67,
+              25.6125
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P008",
+        "district": "Madhepura",
+        "block": "DummyBlock_3",
+        "panchayat": "DummyPanchayat_008",
+        "data_status": "DUMMY_DEVELOPMENT_ONLY"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.79,
+              25.6125
+            ],
+            [
+              86.91,
+              25.6125
+            ],
+            [
+              86.91,
+              25.775
+            ],
+            [
+              86.79,
+              25.775
+            ],
+            [
+              86.79,
+              25.6125
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P009",
+        "district": "Madhepura",
+        "block": "DummyBlock_4",
+        "panchayat": "DummyPanchayat_009",
+        "data_status": "DUMMY_DEVELOPMENT_ONLY"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.91,
+              25.6125
+            ],
+            [
+              87.03,
+              25.6125
+            ],
+            [
+              87.03,
+              25.775
+            ],
+            [
+              86.91,
+              25.775
+            ],
+            [
+              86.91,
+              25.6125
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P010",
+        "district": "Madhepura",
+        "block": "DummyBlock_5",
+        "panchayat": "DummyPanchayat_010",
+        "data_status": "DUMMY_DEVELOPMENT_ONLY"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              87.03,
+              25.6125
+            ],
+            [
+              87.15,
+              25.6125
+            ],
+            [
+              87.15,
+              25.775
+            ],
+            [
+              87.03,
+              25.775
+            ],
+            [
+              87.03,
+              25.6125
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P011",
+        "district": "Madhepura",
+        "block": "DummyBlock_1",
+        "panchayat": "DummyPanchayat_011",
+        "data_status": "DUMMY_DEVELOPMENT_ONLY"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.55,
+              25.775
+            ],
+            [
+              86.67,
+              25.775
+            ],
+            [
+              86.67,
+              25.9375
+            ],
+            [
+              86.55,
+              25.9375
+            ],
+            [
+              86.55,
+              25.775
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P012",
+        "district": "Madhepura",
+        "block": "DummyBlock_2",
+        "panchayat": "DummyPanchayat_012",
+        "data_status": "DUMMY_DEVELOPMENT_ONLY"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.67,
+              25.775
+            ],
+            [
+              86.79,
+              25.775
+            ],
+            [
+              86.79,
+              25.9375
+            ],
+            [
+              86.67,
+              25.9375
+            ],
+            [
+              86.67,
+              25.775
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P013",
+        "district": "Madhepura",
+        "block": "DummyBlock_3",
+        "panchayat": "DummyPanchayat_013",
+        "data_status": "DUMMY_DEVELOPMENT_ONLY"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.79,
+              25.775
+            ],
+            [
+              86.91,
+              25.775
+            ],
+            [
+              86.91,
+              25.9375
+            ],
+            [
+              86.79,
+              25.9375
+            ],
+            [
+              86.79,
+              25.775
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P014",
+        "district": "Madhepura",
+        "block": "DummyBlock_4",
+        "panchayat": "DummyPanchayat_014",
+        "data_status": "DUMMY_DEVELOPMENT_ONLY"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.91,
+              25.775
+            ],
+            [
+              87.03,
+              25.775
+            ],
+            [
+              87.03,
+              25.9375
+            ],
+            [
+              86.91,
+              25.9375
+            ],
+            [
+              86.91,
+              25.775
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P015",
+        "district": "Madhepura",
+        "block": "DummyBlock_5",
+        "panchayat": "DummyPanchayat_015",
+        "data_status": "DUMMY_DEVELOPMENT_ONLY"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              87.03,
+              25.775
+            ],
+            [
+              87.15,
+              25.775
+            ],
+            [
+              87.15,
+              25.9375
+            ],
+            [
+              87.03,
+              25.9375
+            ],
+            [
+              87.03,
+              25.775
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P016",
+        "district": "Madhepura",
+        "block": "DummyBlock_1",
+        "panchayat": "DummyPanchayat_016",
+        "data_status": "DUMMY_DEVELOPMENT_ONLY"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.55,
+              25.9375
+            ],
+            [
+              86.67,
+              25.9375
+            ],
+            [
+              86.67,
+              26.1
+            ],
+            [
+              86.55,
+              26.1
+            ],
+            [
+              86.55,
+              25.9375
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P017",
+        "district": "Madhepura",
+        "block": "DummyBlock_2",
+        "panchayat": "DummyPanchayat_017",
+        "data_status": "DUMMY_DEVELOPMENT_ONLY"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.67,
+              25.9375
+            ],
+            [
+              86.79,
+              25.9375
+            ],
+            [
+              86.79,
+              26.1
+            ],
+            [
+              86.67,
+              26.1
+            ],
+            [
+              86.67,
+              25.9375
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P018",
+        "district": "Madhepura",
+        "block": "DummyBlock_3",
+        "panchayat": "DummyPanchayat_018",
+        "data_status": "DUMMY_DEVELOPMENT_ONLY"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.79,
+              25.9375
+            ],
+            [
+              86.91,
+              25.9375
+            ],
+            [
+              86.91,
+              26.1
+            ],
+            [
+              86.79,
+              26.1
+            ],
+            [
+              86.79,
+              25.9375
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P019",
+        "district": "Madhepura",
+        "block": "DummyBlock_4",
+        "panchayat": "DummyPanchayat_019",
+        "data_status": "DUMMY_DEVELOPMENT_ONLY"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.91,
+              25.9375
+            ],
+            [
+              87.03,
+              25.9375
+            ],
+            [
+              87.03,
+              26.1
+            ],
+            [
+              86.91,
+              26.1
+            ],
+            [
+              86.91,
+              25.9375
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "P020",
+        "district": "Madhepura",
+        "block": "DummyBlock_5",
+        "panchayat": "DummyPanchayat_020",
+        "data_status": "DUMMY_DEVELOPMENT_ONLY"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              87.03,
+              25.9375
+            ],
+            [
+              87.15,
+              25.9375
+            ],
+            [
+              87.15,
+              26.1
+            ],
+            [
+              87.03,
+              26.1
+            ],
+            [
+              87.03,
+              25.9375
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
